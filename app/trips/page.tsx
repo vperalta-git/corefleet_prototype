@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { PageWrapper } from '@/components/PageWrapper';
 import { StatusBadge } from '@/components/StatusBadge';
 import { Trip, Vehicle } from '@/lib/types';
-import { getTrips, saveTrips, deleteTrip, getVehicles } from '@/lib/storage';
-import { Plus, Trash2, Calendar, MapPin } from 'lucide-react';
+import { deleteTrip, getTrips, getVehicles, saveTrips } from '@/lib/storage';
+import { MapPin, Plus, Trash2 } from 'lucide-react';
 
 export default function TripsPage() {
   const [trips, setTrips] = useState<Trip[]>([]);
@@ -37,27 +37,27 @@ export default function TripsPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const vehicle = vehicles.find(v => v.id === formData.vehicleId);
-    if (vehicle) {
-      const newTrip: Trip = {
-        id: Date.now().toString(),
-        vehicleId: formData.vehicleId,
-        vehicleName: vehicle.name,
-        driver: vehicle.driver,
-        startLocation: formData.startLocation,
-        endLocation: formData.endLocation,
-        startTime: new Date().toISOString(),
-        endTime: new Date(Date.now() + 3600000).toISOString(),
-        distance: formData.distance,
-        status: formData.status,
-        fuelUsed: formData.distance * 0.12,
-      };
-      const allTrips = getTrips();
-      allTrips.push(newTrip);
-      saveTrips(allTrips);
-      setTrips(allTrips);
-      setShowModal(false);
-    }
+    const vehicle = vehicles.find((v) => v.id === formData.vehicleId);
+    if (!vehicle) return;
+
+    const newTrip: Trip = {
+      id: Date.now().toString(),
+      vehicleId: formData.vehicleId,
+      vehicleName: vehicle.name,
+      driver: vehicle.driver,
+      startLocation: formData.startLocation,
+      endLocation: formData.endLocation,
+      startTime: new Date().toISOString(),
+      endTime: new Date(Date.now() + 3600000).toISOString(),
+      distance: formData.distance,
+      status: formData.status,
+      fuelUsed: formData.distance * 0.12,
+    };
+    const allTrips = getTrips();
+    allTrips.push(newTrip);
+    saveTrips(allTrips);
+    setTrips(allTrips);
+    setShowModal(false);
   };
 
   const handleDelete = (id: string) => {
@@ -73,54 +73,51 @@ export default function TripsPage() {
   return (
     <PageWrapper>
       <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Trips</h1>
-            <p className="text-gray-600 mt-1">Track vehicle routes and deliveries</p>
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">Routes</p>
+            <h1 className="mt-2 text-4xl font-black tracking-tight text-slate-950">Trips</h1>
+            <p className="mt-2 text-slate-500">Track vehicle routes, deliveries, distance, and fuel usage.</p>
           </div>
           <button
             onClick={handleAddClick}
-            className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+            className="flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 py-3 font-black text-white shadow-lg shadow-slate-950/20 transition hover:-translate-y-0.5 hover:bg-slate-800"
           >
             <Plus size={20} />
             Add Trip
           </button>
         </div>
 
-        {/* Trips Table */}
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="border-b border-slate-200 bg-slate-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Vehicle</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Driver</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Route</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Distance</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Fuel Used</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Status</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Actions</th>
+                  {['Vehicle', 'Driver', 'Route', 'Distance', 'Fuel Used', 'Status', 'Actions'].map((heading) => (
+                    <th key={heading} className="px-6 py-4 text-left text-xs font-black uppercase tracking-[0.14em] text-slate-500">
+                      {heading}
+                    </th>
+                  ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-slate-100">
                 {trips.map((trip) => (
-                  <tr key={trip.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">{trip.vehicleName}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{trip.driver}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
-                      <div className="flex items-center gap-1">
-                        <MapPin size={16} className="text-gray-400" />
-                        {trip.startLocation} → {trip.endLocation}
+                  <tr key={trip.id} className="transition hover:bg-cyan-50/50">
+                    <td className="px-6 py-4 text-sm font-black text-slate-950">{trip.vehicleName}</td>
+                    <td className="px-6 py-4 text-sm text-slate-600">{trip.driver}</td>
+                    <td className="px-6 py-4 text-sm text-slate-600">
+                      <div className="flex min-w-64 items-center gap-1">
+                        <MapPin size={16} className="text-cyan-500" />
+                        {trip.startLocation} to {trip.endLocation}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{formatDistance(trip.distance)} km</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{formatFuel(trip.fuelUsed)} L</td>
+                    <td className="px-6 py-4 text-sm font-semibold text-slate-700">{formatDistance(trip.distance)} km</td>
+                    <td className="px-6 py-4 text-sm text-slate-600">{formatFuel(trip.fuelUsed)} L</td>
                     <td className="px-6 py-4"><StatusBadge status={trip.status} /></td>
                     <td className="px-6 py-4 text-sm">
                       <button
                         onClick={() => handleDelete(trip.id)}
-                        className="text-red-500 hover:text-red-700 p-1"
+                        className="rounded-lg p-2 text-rose-600 transition hover:bg-rose-100 hover:text-rose-800"
                       >
                         <Trash2 size={18} />
                       </button>
@@ -132,18 +129,17 @@ export default function TripsPage() {
           </div>
         </div>
 
-        {/* Modal */}
         {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Create New Trip</h2>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-4 duration-300">
+              <h2 className="mb-4 text-xl font-black text-slate-950">Create New Trip</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle</label>
+                  <label className="mb-1 block text-sm font-bold text-slate-700">Vehicle</label>
                   <select
                     value={formData.vehicleId}
                     onChange={(e) => setFormData({ ...formData, vehicleId: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none transition focus:border-cyan-400 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
                     required
                   >
                     <option value="">Select a vehicle</option>
@@ -155,59 +151,59 @@ export default function TripsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Start Location</label>
+                  <label className="mb-1 block text-sm font-bold text-slate-700">Start Location</label>
                   <input
                     type="text"
                     value={formData.startLocation}
                     onChange={(e) => setFormData({ ...formData, startLocation: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none transition focus:border-cyan-400 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">End Location</label>
+                  <label className="mb-1 block text-sm font-bold text-slate-700">End Location</label>
                   <input
                     type="text"
                     value={formData.endLocation}
                     onChange={(e) => setFormData({ ...formData, endLocation: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none transition focus:border-cyan-400 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Distance (km)</label>
+                  <label className="mb-1 block text-sm font-bold text-slate-700">Distance (km)</label>
                   <input
                     type="number"
                     value={formData.distance}
                     onChange={(e) => setFormData({ ...formData, distance: parseFloat(e.target.value) })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none transition focus:border-cyan-400 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
                     step="0.1"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                  <label className="mb-1 block text-sm font-bold text-slate-700">Status</label>
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none transition focus:border-cyan-400 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
                   >
                     <option value="scheduled">Scheduled</option>
                     <option value="in-progress">In Progress</option>
                     <option value="completed">Completed</option>
                   </select>
                 </div>
-                <div className="flex gap-3 justify-end pt-4">
+                <div className="flex justify-end gap-3 pt-4">
                   <button
                     type="button"
                     onClick={() => setShowModal(false)}
-                    className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    className="rounded-xl border border-slate-200 px-4 py-2 font-bold text-slate-700 transition hover:bg-slate-50"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                    className="rounded-xl bg-slate-950 px-4 py-2 font-black text-white transition hover:bg-slate-800"
                   >
                     Create Trip
                   </button>

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { PageWrapper } from '@/components/PageWrapper';
 import { StatusBadge } from '@/components/StatusBadge';
-import { Vehicle } from '@/lib/types';
+import { Vehicle, VehicleStatus } from '@/lib/types';
 import { getVehicles, saveVehicles, deleteVehicle, updateVehicle } from '@/lib/storage';
 import { Plus, Trash2, Edit2 } from 'lucide-react';
 
@@ -15,7 +15,7 @@ export default function VehiclesPage() {
     plateNumber: '',
     name: '',
     driver: '',
-    status: 'active' as const,
+    status: 'active' as VehicleStatus,
   });
 
   useEffect(() => {
@@ -70,56 +70,62 @@ export default function VehiclesPage() {
   return (
     <PageWrapper>
       <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Vehicles</h1>
-            <p className="text-gray-600 mt-1">Manage your fleet vehicles</p>
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">Fleet Assets</p>
+            <h1 className="mt-2 text-4xl font-black tracking-tight text-slate-950">Vehicles</h1>
+            <p className="mt-2 text-slate-500">Manage your fleet vehicles, drivers, and operating status.</p>
           </div>
           <button
             onClick={handleAddClick}
-            className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+            className="flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 py-3 font-black text-white shadow-lg shadow-slate-950/20 transition hover:-translate-y-0.5 hover:bg-slate-800"
           >
             <Plus size={20} />
             Add Vehicle
           </button>
         </div>
 
-        {/* Vehicles Table */}
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="border-b border-slate-200 bg-slate-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Plate Number</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Vehicle Name</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Driver</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Status</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Fuel Level</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Odometer</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Actions</th>
+                  <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-[0.14em] text-slate-500">Plate Number</th>
+                  <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-[0.14em] text-slate-500">Vehicle Name</th>
+                  <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-[0.14em] text-slate-500">Driver</th>
+                  <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-[0.14em] text-slate-500">Status</th>
+                  <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-[0.14em] text-slate-500">Fuel Level</th>
+                  <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-[0.14em] text-slate-500">Odometer</th>
+                  <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-[0.14em] text-slate-500">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-slate-100">
                 {vehicles.map((vehicle) => (
-                  <tr key={vehicle.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">{vehicle.plateNumber}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{vehicle.name}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{vehicle.driver}</td>
+                  <tr key={vehicle.id} className="transition hover:bg-cyan-50/50">
+                    <td className="px-6 py-4 text-sm font-black text-slate-950">{vehicle.plateNumber}</td>
+                    <td className="px-6 py-4 text-sm font-semibold text-slate-700">{vehicle.name}</td>
+                    <td className="px-6 py-4 text-sm text-slate-600">{vehicle.driver}</td>
                     <td className="px-6 py-4"><StatusBadge status={vehicle.status} /></td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{vehicle.fuelLevel}%</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{vehicle.odometer.toLocaleString()} km</td>
+                    <td className="px-6 py-4 text-sm text-slate-600">
+                      <div className="min-w-28">
+                        <div className="h-2 rounded-full bg-slate-100">
+                          <div className="h-2 rounded-full bg-emerald-500" style={{ width: `${vehicle.fuelLevel}%` }} />
+                        </div>
+                        <span className="mt-1 block text-xs font-bold">{vehicle.fuelLevel}%</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-slate-600">{vehicle.odometer.toLocaleString()} km</td>
                     <td className="px-6 py-4 text-sm">
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleEditClick(vehicle)}
-                          className="text-blue-500 hover:text-blue-700 p-1"
+                          className="rounded-lg p-2 text-cyan-600 transition hover:bg-cyan-100 hover:text-cyan-800"
                         >
                           <Edit2 size={18} />
                         </button>
                         <button
                           onClick={() => handleDelete(vehicle.id)}
-                          className="text-red-500 hover:text-red-700 p-1"
+                          className="rounded-lg p-2 text-rose-600 transition hover:bg-rose-100 hover:text-rose-800"
                         >
                           <Trash2 size={18} />
                         </button>
@@ -134,48 +140,48 @@ export default function VehiclesPage() {
 
         {/* Modal */}
         {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-4 duration-300">
+              <h2 className="mb-4 text-xl font-black text-slate-950">
                 {editingId ? 'Edit Vehicle' : 'Add New Vehicle'}
               </h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Plate Number</label>
+                  <label className="mb-1 block text-sm font-bold text-slate-700">Plate Number</label>
                   <input
                     type="text"
                     value={formData.plateNumber}
                     onChange={(e) => setFormData({ ...formData, plateNumber: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none transition focus:border-cyan-400 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle Name</label>
+                  <label className="mb-1 block text-sm font-bold text-slate-700">Vehicle Name</label>
                   <input
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none transition focus:border-cyan-400 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Driver Name</label>
+                  <label className="mb-1 block text-sm font-bold text-slate-700">Driver Name</label>
                   <input
                     type="text"
                     value={formData.driver}
                     onChange={(e) => setFormData({ ...formData, driver: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none transition focus:border-cyan-400 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                  <label className="mb-1 block text-sm font-bold text-slate-700">Status</label>
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none transition focus:border-cyan-400 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
                   >
                     <option value="active">Active</option>
                     <option value="idle">Idle</option>
@@ -187,13 +193,13 @@ export default function VehiclesPage() {
                   <button
                     type="button"
                     onClick={() => setShowModal(false)}
-                    className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    className="rounded-xl border border-slate-200 px-4 py-2 font-bold text-slate-700 transition hover:bg-slate-50"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                    className="rounded-xl bg-slate-950 px-4 py-2 font-black text-white transition hover:bg-slate-800"
                   >
                     {editingId ? 'Update' : 'Add'} Vehicle
                   </button>

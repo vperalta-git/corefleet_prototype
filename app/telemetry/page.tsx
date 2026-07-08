@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { PageWrapper } from '@/components/PageWrapper';
 import { Vehicle } from '@/lib/types';
 import { getVehicles } from '@/lib/storage';
-import { Gauge, Zap, Droplet, Compass } from 'lucide-react';
-import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Compass, Droplet, Gauge, Zap } from 'lucide-react';
+import { Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export default function TelemetryPage() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -19,9 +19,8 @@ export default function TelemetryPage() {
     }
   }, []);
 
-  const selectedVehicle = vehicles.find(v => v.id === selectedVehicleId);
+  const selectedVehicle = vehicles.find((v) => v.id === selectedVehicleId);
 
-  // Mock telemetry data
   const speedData = [
     { time: '00:00', speed: 0 },
     { time: '02:00', speed: 25 },
@@ -62,22 +61,30 @@ export default function TelemetryPage() {
     { time: '12:00', voltage: 13.5 },
   ];
 
+  const metricCards = selectedVehicle
+    ? [
+        { label: 'Speed', value: selectedVehicle.speed, unit: 'km/h', icon: Gauge, color: 'text-cyan-500' },
+        { label: 'Engine Temp', value: 92, unit: 'deg C', icon: Zap, color: 'text-orange-500' },
+        { label: 'Fuel Level', value: selectedVehicle.fuelLevel, unit: '%', icon: Droplet, color: 'text-emerald-500' },
+        { label: 'Battery', value: 14.2, unit: 'V', icon: Compass, color: 'text-rose-500' },
+      ]
+    : [];
+
   return (
     <PageWrapper>
       <div className="space-y-6">
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Telemetry</h1>
-          <p className="text-gray-600 mt-1">Real-time vehicle performance and diagnostics</p>
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">Diagnostics</p>
+          <h1 className="mt-2 text-4xl font-black tracking-tight text-slate-950">Telemetry</h1>
+          <p className="mt-2 text-slate-500">Real-time vehicle performance and diagnostics.</p>
         </div>
 
-        {/* Vehicle Selector */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Select Vehicle</label>
+        <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+          <label className="mb-2 block text-sm font-black uppercase tracking-[0.14em] text-slate-500">Select Vehicle</label>
           <select
             value={selectedVehicleId}
             onChange={(e) => setSelectedVehicleId(e.target.value)}
-            className="w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 font-semibold text-slate-900 outline-none transition focus:border-cyan-400 focus:bg-white focus:ring-4 focus:ring-cyan-500/10 md:w-80"
           >
             {vehicles.map((v) => (
               <option key={v.id} value={v.id}>
@@ -87,81 +94,42 @@ export default function TelemetryPage() {
           </select>
         </div>
 
-        {/* Current Metrics */}
         {selectedVehicle && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white rounded-lg p-4 border border-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-gray-500 uppercase">Speed</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">{selectedVehicle.speed}</p>
-                  <p className="text-xs text-gray-600">km/h</p>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+            {metricCards.map((metric) => {
+              const Icon = metric.icon;
+              return (
+                <div key={metric.label} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-black uppercase tracking-[0.14em] text-slate-500">{metric.label}</p>
+                      <p className="mt-1 text-3xl font-black text-slate-950">{metric.value}</p>
+                      <p className="text-xs font-semibold text-slate-500">{metric.unit}</p>
+                    </div>
+                    <Icon size={32} className={metric.color} />
+                  </div>
                 </div>
-                <Gauge size={32} className="text-blue-500" />
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg p-4 border border-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-gray-500 uppercase">Engine Temp</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">92</p>
-                  <p className="text-xs text-gray-600">°C</p>
-                </div>
-                <Zap size={32} className="text-orange-500" />
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg p-4 border border-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-gray-500 uppercase">Fuel Level</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">{selectedVehicle.fuelLevel}</p>
-                  <p className="text-xs text-gray-600">%</p>
-                </div>
-                <Droplet size={32} className="text-green-500" />
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg p-4 border border-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-gray-500 uppercase">Battery</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">14.2</p>
-                  <p className="text-xs text-gray-600">V</p>
-                </div>
-                <Compass size={32} className="text-red-500" />
-              </div>
-            </div>
+              );
+            })}
           </div>
         )}
 
-        {/* Charts Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Speed Chart */}
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Speed Over Time</h3>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <h3 className="mb-4 text-lg font-black text-slate-950">Speed Over Time</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={speedData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="time" />
                 <YAxis />
                 <Tooltip />
-                <Line
-                  type="monotone"
-                  dataKey="speed"
-                  stroke="#3b82f6"
-                  strokeWidth={2}
-                  dot={{ fill: '#3b82f6', r: 4 }}
-                  activeDot={{ r: 6 }}
-                />
+                <Line type="monotone" dataKey="speed" stroke="#06b6d4" strokeWidth={3} dot={{ fill: '#06b6d4', r: 4 }} activeDot={{ r: 6 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
 
-          {/* Fuel Consumption Chart */}
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Cumulative Fuel Consumption</h3>
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <h3 className="mb-4 text-lg font-black text-slate-950">Cumulative Fuel Consumption</h3>
             <ResponsiveContainer width="100%" height={300}>
               <AreaChart data={fuelConsumptionData}>
                 <defs>
@@ -174,88 +142,54 @@ export default function TelemetryPage() {
                 <XAxis dataKey="time" />
                 <YAxis />
                 <Tooltip />
-                <Area
-                  type="monotone"
-                  dataKey="consumption"
-                  stroke="#f59e0b"
-                  fillOpacity={1}
-                  fill="url(#colorFuel)"
-                />
+                <Area type="monotone" dataKey="consumption" stroke="#f59e0b" fillOpacity={1} fill="url(#colorFuel)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
 
-          {/* Engine Temperature Chart */}
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Engine Temperature</h3>
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <h3 className="mb-4 text-lg font-black text-slate-950">Engine Temperature</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={engineTempData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="time" />
                 <YAxis domain={[50, 110]} />
                 <Tooltip />
-                <Line
-                  type="monotone"
-                  dataKey="temp"
-                  stroke="#ef4444"
-                  strokeWidth={2}
-                  dot={{ fill: '#ef4444', r: 4 }}
-                  activeDot={{ r: 6 }}
-                />
+                <Line type="monotone" dataKey="temp" stroke="#ef4444" strokeWidth={3} dot={{ fill: '#ef4444', r: 4 }} activeDot={{ r: 6 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
 
-          {/* Battery Voltage Chart */}
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Battery Voltage</h3>
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <h3 className="mb-4 text-lg font-black text-slate-950">Battery Voltage</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={batteryVoltageData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="time" />
                 <YAxis domain={[12, 15]} />
                 <Tooltip />
-                <Line
-                  type="monotone"
-                  dataKey="voltage"
-                  stroke="#10b981"
-                  strokeWidth={2}
-                  dot={{ fill: '#10b981', r: 4 }}
-                  activeDot={{ r: 6 }}
-                />
+                <Line type="monotone" dataKey="voltage" stroke="#10b981" strokeWidth={3} dot={{ fill: '#10b981', r: 4 }} activeDot={{ r: 6 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Diagnostics Info */}
-        <div className="bg-white rounded-lg p-6 border border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Vehicle Diagnostics</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 text-sm">
-            <div>
-              <p className="text-gray-500 mb-1">Odometer</p>
-              <p className="font-semibold text-gray-900">{selectedVehicle?.odometer.toLocaleString() || 0} km</p>
-            </div>
-            <div>
-              <p className="text-gray-500 mb-1">Engine Status</p>
-              <p className="font-semibold text-green-600">Optimal</p>
-            </div>
-            <div>
-              <p className="text-gray-500 mb-1">Emissions</p>
-              <p className="font-semibold text-green-600">Normal</p>
-            </div>
-            <div>
-              <p className="text-gray-500 mb-1">Oil Pressure</p>
-              <p className="font-semibold text-gray-900">4.2 bar</p>
-            </div>
-            <div>
-              <p className="text-gray-500 mb-1">Coolant Level</p>
-              <p className="font-semibold text-green-600">Normal</p>
-            </div>
-            <div>
-              <p className="text-gray-500 mb-1">Last Service</p>
-              <p className="font-semibold text-gray-900">45 days ago</p>
-            </div>
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h3 className="mb-4 text-lg font-black text-slate-950">Vehicle Diagnostics</h3>
+          <div className="grid grid-cols-2 gap-4 text-sm md:grid-cols-3 lg:grid-cols-6">
+            {[
+              ['Odometer', `${selectedVehicle?.odometer.toLocaleString() || 0} km`, 'text-slate-950'],
+              ['Engine Status', 'Optimal', 'text-emerald-600'],
+              ['Emissions', 'Normal', 'text-emerald-600'],
+              ['Oil Pressure', '4.2 bar', 'text-slate-950'],
+              ['Coolant Level', 'Normal', 'text-emerald-600'],
+              ['Last Service', '45 days ago', 'text-slate-950'],
+            ].map(([label, value, color]) => (
+              <div key={label} className="rounded-2xl bg-slate-50 p-4">
+                <p className="mb-1 text-slate-500">{label}</p>
+                <p className={`font-black ${color}`}>{value}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
