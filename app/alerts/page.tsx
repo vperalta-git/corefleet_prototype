@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { PageWrapper } from '@/components/PageWrapper';
 import { StatusBadge } from '@/components/StatusBadge';
 import { Alert as AlertType } from '@/lib/types';
-import { getAlerts, saveAlerts, updateAlert, deleteAlert } from '@/lib/storage';
+import { getAlerts, updateAlert, deleteAlert } from '@/lib/storage';
 import { Trash2, CheckCircle, AlertTriangle } from 'lucide-react';
 
 export default function AlertsPage() {
@@ -42,85 +42,82 @@ export default function AlertsPage() {
   return (
     <PageWrapper>
       <div className="space-y-6">
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Alerts</h1>
-          <p className="text-gray-600 mt-1">Fleet monitoring and alert management</p>
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">Signals</p>
+          <h1 className="mt-2 text-4xl font-black tracking-tight text-slate-950">Alerts</h1>
+          <p className="mt-2 text-slate-500">Fleet monitoring and alert management.</p>
         </div>
 
-        {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white rounded-lg p-4 border border-gray-200">
-            <p className="text-sm text-gray-600">Total Alerts</p>
-            <p className="text-3xl font-bold text-gray-900 mt-2">{stats.total}</p>
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <p className="text-sm font-bold uppercase tracking-[0.14em] text-slate-500">Total Alerts</p>
+            <p className="mt-2 text-4xl font-black text-slate-950">{stats.total}</p>
           </div>
-          <div className="bg-white rounded-lg p-4 border border-gray-200">
-            <p className="text-sm text-gray-600">Unresolved</p>
-            <p className="text-3xl font-bold text-yellow-600 mt-2">{stats.unresolved}</p>
+          <div className="rounded-3xl border border-amber-100 bg-amber-50 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <p className="text-sm font-bold uppercase tracking-[0.14em] text-amber-700">Unresolved</p>
+            <p className="mt-2 text-4xl font-black text-slate-950">{stats.unresolved}</p>
           </div>
-          <div className="bg-white rounded-lg p-4 border border-gray-200">
-            <p className="text-sm text-gray-600">Critical</p>
-            <p className="text-3xl font-bold text-red-600 mt-2">{stats.critical}</p>
+          <div className="rounded-3xl border border-rose-100 bg-rose-50 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <p className="text-sm font-bold uppercase tracking-[0.14em] text-rose-700">Critical</p>
+            <p className="mt-2 text-4xl font-black text-slate-950">{stats.critical}</p>
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm">
           <button
             onClick={() => setFilter('all')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`rounded-xl px-4 py-2 font-black transition-all ${
               filter === 'all'
-                ? 'bg-blue-500 text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                ? 'bg-slate-950 text-white shadow-lg shadow-slate-950/15'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-950'
             }`}
           >
             All Alerts
           </button>
           <button
             onClick={() => setFilter('unresolved')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`rounded-xl px-4 py-2 font-black transition-all ${
               filter === 'unresolved'
-                ? 'bg-blue-500 text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                ? 'bg-slate-950 text-white shadow-lg shadow-slate-950/15'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-950'
             }`}
           >
             Unresolved
           </button>
           <button
             onClick={() => setFilter('critical')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`rounded-xl px-4 py-2 font-black transition-all ${
               filter === 'critical'
-                ? 'bg-red-500 text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/20'
+                : 'text-slate-600 hover:bg-rose-50 hover:text-rose-700'
             }`}
           >
             Critical
           </button>
         </div>
 
-        {/* Alerts List */}
         <div className="space-y-3">
           {filteredAlerts.length > 0 ? (
             filteredAlerts.map((alert) => (
               <div
                 key={alert.id}
-                className={`bg-white rounded-lg p-4 border-l-4 ${
+                className={`rounded-3xl border p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl ${
                   alert.severity === 'critical'
-                    ? 'border-l-red-500 bg-red-50'
+                    ? 'border-rose-100 bg-rose-50'
                     : alert.severity === 'warning'
-                    ? 'border-l-yellow-500 bg-yellow-50'
-                    : 'border-l-blue-500 bg-blue-50'
+                    ? 'border-amber-100 bg-amber-50'
+                    : 'border-cyan-100 bg-cyan-50'
                 }`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <AlertTriangle size={18} className={
-                        alert.severity === 'critical' ? 'text-red-600' :
-                        alert.severity === 'warning' ? 'text-yellow-600' :
-                        'text-blue-600'
+                        alert.severity === 'critical' ? 'text-rose-600' :
+                        alert.severity === 'warning' ? 'text-amber-600' :
+                        'text-cyan-600'
                       } />
-                      <h3 className="font-semibold text-gray-900">{alert.vehicleName}</h3>
+                      <h3 className="font-black text-slate-950">{alert.vehicleName}</h3>
                       <StatusBadge status={alert.severity} />
                       {alert.resolved && (
                         <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
@@ -128,8 +125,8 @@ export default function AlertsPage() {
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-700 mb-2">{alert.message}</p>
-                    <div className="flex items-center gap-4 text-xs text-gray-500">
+                    <p className="mb-2 text-sm font-medium text-slate-700">{alert.message}</p>
+                    <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-500">
                       <span>Type: {alert.type}</span>
                       <span>
                         {new Date(alert.timestamp).toLocaleDateString()}{' '}
@@ -141,7 +138,7 @@ export default function AlertsPage() {
                     {!alert.resolved && (
                       <button
                         onClick={() => handleResolve(alert.id)}
-                        className="p-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors"
+                        className="rounded-xl p-2 text-emerald-600 transition hover:bg-emerald-100"
                         title="Mark as resolved"
                       >
                         <CheckCircle size={20} />
@@ -149,7 +146,7 @@ export default function AlertsPage() {
                     )}
                     <button
                       onClick={() => handleDelete(alert.id)}
-                      className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
+                      className="rounded-xl p-2 text-rose-600 transition hover:bg-rose-100"
                       title="Delete alert"
                     >
                       <Trash2 size={20} />
@@ -159,9 +156,9 @@ export default function AlertsPage() {
               </div>
             ))
           ) : (
-            <div className="bg-white rounded-lg p-8 text-center">
-              <AlertTriangle size={48} className="mx-auto text-gray-300 mb-3" />
-              <p className="text-gray-500">No alerts matching your filter</p>
+            <div className="rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+              <AlertTriangle size={48} className="mx-auto mb-3 text-slate-300" />
+              <p className="text-slate-500">No alerts matching your filter</p>
             </div>
           )}
         </div>

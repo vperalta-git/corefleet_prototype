@@ -11,34 +11,34 @@ export function StatusBadge({ status }: StatusBadgeProps) {
     switch (status) {
       // Vehicle Status
       case 'active':
-        return 'bg-green-100 text-green-800';
+        return 'bg-emerald-100 text-emerald-800 ring-emerald-200';
       case 'idle':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-amber-100 text-amber-800 ring-amber-200';
       case 'maintenance':
-        return 'bg-orange-100 text-orange-800';
+        return 'bg-orange-100 text-orange-800 ring-orange-200';
       case 'offline':
-        return 'bg-red-100 text-red-800';
+        return 'bg-rose-100 text-rose-800 ring-rose-200';
       // Alert Severity
       case 'critical':
-        return 'bg-red-100 text-red-800';
+        return 'bg-rose-100 text-rose-800 ring-rose-200';
       case 'warning':
-        return 'bg-orange-100 text-orange-800';
+        return 'bg-amber-100 text-amber-800 ring-amber-200';
       case 'info':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-cyan-100 text-cyan-800 ring-cyan-200';
       // Trip Status
       case 'completed':
-        return 'bg-green-100 text-green-800';
+        return 'bg-emerald-100 text-emerald-800 ring-emerald-200';
       case 'in-progress':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-cyan-100 text-cyan-800 ring-cyan-200';
       case 'scheduled':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-violet-100 text-violet-800 ring-violet-200';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-slate-100 text-slate-800 ring-slate-200';
     }
   };
 
   return (
-    <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getColorClasses()}`}>
+    <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-black uppercase tracking-[0.12em] ring-1 ${getColorClasses()}`}>
       {status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' ')}
     </span>
   );

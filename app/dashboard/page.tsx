@@ -63,49 +63,64 @@ export default function DashboardPage() {
   return (
     <PageWrapper>
       <div className="space-y-8">
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600 mt-1">Real-time fleet monitoring and analytics</p>
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">Live Overview</p>
+              <h1 className="mt-2 text-4xl font-black tracking-tight text-slate-950">Dashboard</h1>
+              <p className="mt-2 max-w-2xl text-slate-500">Real-time fleet monitoring, vehicle health, and alert analytics in one workspace.</p>
+            </div>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl bg-slate-950 px-4 py-3 text-white">
+                <p className="text-xs text-slate-400">Mileage</p>
+                <p className="text-lg font-black">{totalMileage.toLocaleString()} km</p>
+              </div>
+              <div className="rounded-2xl bg-cyan-50 px-4 py-3">
+                <p className="text-xs text-cyan-700">Fuel Avg</p>
+                <p className="text-lg font-black text-slate-950">{averageFuelLevel}%</p>
+              </div>
+              <div className="rounded-2xl bg-rose-50 px-4 py-3">
+                <p className="text-xs text-rose-700">Critical</p>
+                <p className="text-lg font-black text-slate-950">{criticalAlerts}</p>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard
             title="Total Vehicles"
             value={vehicles.length}
             subtitle="All registered vehicles"
             icon={<Truck size={24} />}
-            bgColor="bg-blue-50"
+            bgColor="bg-cyan-50"
           />
           <StatCard
             title="Active Now"
             value={activeVehicles}
             subtitle={`${idleVehicles} idle, ${maintenanceVehicles} maintenance`}
             icon={<TrendingUp size={24} />}
-            bgColor="bg-green-50"
+            bgColor="bg-emerald-50"
           />
           <StatCard
             title="Alerts"
             value={criticalAlerts}
             subtitle={`${criticalAlerts} critical, ${alerts.filter(a => a.severity === 'warning').length} warnings`}
             icon={<AlertTriangle size={24} />}
-            bgColor="bg-red-50"
+            bgColor="bg-rose-50"
           />
           <StatCard
             title="Avg Fuel"
             value={`${averageFuelLevel}%`}
             subtitle="Fleet average"
             icon={<Fuel size={24} />}
-            bgColor="bg-yellow-50"
+            bgColor="bg-amber-50"
           />
         </div>
 
-        {/* Charts Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Fleet Status Chart */}
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Fleet Status</h3>
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <h3 className="mb-4 text-lg font-black text-slate-950">Fleet Status</h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -127,71 +142,67 @@ export default function DashboardPage() {
             <div className="flex justify-center gap-4 mt-4 flex-wrap">
               {fleetStatusData.map((item) => (
                 <div key={item.name} className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
-                  <span className="text-sm text-gray-600">{item.name}: {item.value}</span>
+                  <div className="h-3 w-3 rounded-full" style={{ backgroundColor: item.color }}></div>
+                  <span className="text-sm font-semibold text-slate-600">{item.name}: {item.value}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Daily Mileage Chart */}
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Daily Mileage</h3>
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <h3 className="mb-4 text-lg font-black text-slate-950">Daily Mileage</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={dailyMileageData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="day" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="distance" fill="#3b82f6" />
+                <Bar dataKey="distance" fill="#06b6d4" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
 
-          {/* Speed Trend Chart */}
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Speed Trend</h3>
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <h3 className="mb-4 text-lg font-black text-slate-950">Speed Trend</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={speedTrendData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="time" />
                 <YAxis />
                 <Tooltip />
-                <Line type="monotone" dataKey="speed" stroke="#3b82f6" strokeWidth={2} dot={{ fill: '#3b82f6' }} />
+                <Line type="monotone" dataKey="speed" stroke="#06b6d4" strokeWidth={3} dot={{ fill: '#06b6d4' }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
 
-          {/* Alerts by Type */}
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Alerts by Type</h3>
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <h3 className="mb-4 text-lg font-black text-slate-950">Alerts by Type</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={alertsByTypeData} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis type="number" />
                 <YAxis dataKey="type" type="category" />
                 <Tooltip />
-                <Bar dataKey="count" fill="#3b82f6" />
+                <Bar dataKey="count" fill="#0f172a" radius={[0, 8, 8, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Recent Alerts */}
-        <div className="bg-white rounded-lg p-6 border border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Alerts</h3>
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h3 className="mb-4 text-lg font-black text-slate-950">Recent Alerts</h3>
           <div className="space-y-3">
             {alerts.slice(0, 5).map((alert) => (
-              <div key={alert.id} className="flex items-start justify-between p-3 bg-gray-50 rounded-lg">
+              <div key={alert.id} className="flex items-start justify-between rounded-2xl border border-slate-100 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:bg-white hover:shadow-md">
                 <div className="flex-1">
-                  <p className="font-medium text-gray-900">{alert.vehicleName}</p>
-                  <p className="text-sm text-gray-600">{alert.message}</p>
+                  <p className="font-black text-slate-950">{alert.vehicleName}</p>
+                  <p className="text-sm text-slate-600">{alert.message}</p>
                 </div>
                 <div className="text-right">
                   <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${
-                    alert.severity === 'critical' ? 'bg-red-100 text-red-800' :
-                    alert.severity === 'warning' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-blue-100 text-blue-800'
+                    alert.severity === 'critical' ? 'bg-rose-100 text-rose-800' :
+                    alert.severity === 'warning' ? 'bg-amber-100 text-amber-800' :
+                    'bg-cyan-100 text-cyan-800'
                   }`}>
                     {alert.severity.toUpperCase()}
                   </span>

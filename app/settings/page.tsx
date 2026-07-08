@@ -1,14 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PageWrapper } from '@/components/PageWrapper';
 import { getAuthState, logout } from '@/lib/auth';
-import { Bell, Lock, Users, HelpCircle, LogOut, Save } from 'lucide-react';
+import { Bell, HelpCircle, Lock, LogOut, Save, Users } from 'lucide-react';
 
 export default function SettingsPage() {
   const router = useRouter();
-  const [user, setUser] = useState(getAuthState().user);
+  const user = getAuthState().user;
   const [settings, setSettings] = useState({
     notifications: true,
     emailAlerts: true,
@@ -24,7 +24,6 @@ export default function SettingsPage() {
   };
 
   const handleSaveSettings = () => {
-    // In a real app, save to backend
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   };
@@ -34,190 +33,137 @@ export default function SettingsPage() {
     router.push('/login');
   };
 
+  const inputClass = 'w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 font-semibold text-slate-700 outline-none transition focus:border-cyan-400 focus:bg-white focus:ring-4 focus:ring-cyan-500/10 disabled:cursor-not-allowed disabled:text-slate-500';
+
   return (
     <PageWrapper>
-      <div className="max-w-2xl space-y-8">
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-          <p className="text-gray-600 mt-1">Manage your account and preferences</p>
+      <div className="mx-auto max-w-3xl space-y-6">
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">Workspace</p>
+          <h1 className="mt-2 text-4xl font-black tracking-tight text-slate-950">Settings</h1>
+          <p className="mt-2 text-slate-500">Manage your account, notifications, and fleet thresholds.</p>
         </div>
 
-        {/* Profile Section */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <Users size={20} />
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="mb-5 flex items-center gap-2 text-lg font-black text-slate-950">
+            <Users size={20} className="text-cyan-600" />
             Profile Information
           </h2>
           <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-              <input
-                type="text"
-                value={user?.name || ''}
-                disabled
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-              <input
-                type="email"
-                value={user?.email || ''}
-                disabled
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
-              <input
-                type="text"
-                value={user?.role || ''}
-                disabled
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
-              />
-            </div>
+            {[
+              ['Name', user?.name || ''],
+              ['Email', user?.email || ''],
+              ['Role', user?.role || ''],
+            ].map(([label, value]) => (
+              <div key={label}>
+                <label className="mb-1 block text-sm font-bold text-slate-700">{label}</label>
+                <input type="text" value={value} disabled className={inputClass} />
+              </div>
+            ))}
           </div>
-        </div>
+        </section>
 
-        {/* Notification Settings */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <Bell size={20} />
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="mb-5 flex items-center gap-2 text-lg font-black text-slate-950">
+            <Bell size={20} className="text-cyan-600" />
             Notifications
           </h2>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium text-gray-900">In-App Notifications</p>
-                <p className="text-sm text-gray-600">Receive alerts within the dashboard</p>
-              </div>
-              <input
-                type="checkbox"
-                checked={settings.notifications}
-                onChange={(e) => handleSettingChange('notifications', e.target.checked)}
-                className="w-5 h-5 rounded border-gray-300 cursor-pointer"
-              />
-            </div>
-            <div className="border-t pt-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium text-gray-900">Email Alerts</p>
-                  <p className="text-sm text-gray-600">Get critical alerts via email</p>
-                </div>
+          <div className="space-y-3">
+            {[
+              ['notifications', 'In-App Notifications', 'Receive alerts within the dashboard', settings.notifications],
+              ['emailAlerts', 'Email Alerts', 'Get critical alerts via email', settings.emailAlerts],
+            ].map(([key, title, description, checked]) => (
+              <label key={String(key)} className="flex cursor-pointer items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:bg-cyan-50">
+                <span>
+                  <span className="block font-black text-slate-950">{title}</span>
+                  <span className="text-sm text-slate-500">{description}</span>
+                </span>
                 <input
                   type="checkbox"
-                  checked={settings.emailAlerts}
-                  onChange={(e) => handleSettingChange('emailAlerts', e.target.checked)}
-                  className="w-5 h-5 rounded border-gray-300 cursor-pointer"
+                  checked={Boolean(checked)}
+                  onChange={(e) => handleSettingChange(String(key), e.target.checked)}
+                  className="size-5 cursor-pointer accent-cyan-600"
                 />
-              </div>
-            </div>
+              </label>
+            ))}
           </div>
-        </div>
+        </section>
 
-        {/* Fleet Settings */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <Lock size={20} />
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="mb-5 flex items-center gap-2 text-lg font-black text-slate-950">
+            <Lock size={20} className="text-cyan-600" />
             Fleet Thresholds
           </h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Speed Limit Alert (km/h)
-              </label>
+              <label className="mb-2 block text-sm font-bold text-slate-700">Speed Limit Alert (km/h)</label>
               <input
                 type="number"
                 value={settings.speedLimit}
                 onChange={(e) => handleSettingChange('speedLimit', parseInt(e.target.value))}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={inputClass}
               />
-              <p className="text-xs text-gray-500 mt-1">Alert when vehicles exceed this speed</p>
+              <p className="mt-1 text-xs font-semibold text-slate-500">Alert when vehicles exceed this speed.</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Low Fuel Alert Threshold (%)
-              </label>
+              <label className="mb-2 block text-sm font-bold text-slate-700">Low Fuel Alert Threshold (%)</label>
               <input
                 type="number"
                 value={settings.fuelAlertThreshold}
                 onChange={(e) => handleSettingChange('fuelAlertThreshold', parseInt(e.target.value))}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={inputClass}
               />
-              <p className="text-xs text-gray-500 mt-1">Alert when fuel level drops below this percentage</p>
+              <p className="mt-1 text-xs font-semibold text-slate-500">Alert when fuel level drops below this percentage.</p>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Display Settings */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Display Settings</h2>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium text-gray-900">Dark Mode</p>
-                <p className="text-sm text-gray-600">Coming soon</p>
-              </div>
-              <input
-                type="checkbox"
-                checked={settings.darkMode}
-                onChange={(e) => handleSettingChange('darkMode', e.target.checked)}
-                disabled
-                className="w-5 h-5 rounded border-gray-300 cursor-not-allowed opacity-50"
-              />
-            </div>
-          </div>
-        </div>
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="mb-5 text-lg font-black text-slate-950">Display Settings</h2>
+          <label className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 p-4 opacity-70">
+            <span>
+              <span className="block font-black text-slate-950">Dark Mode</span>
+              <span className="text-sm text-slate-500">Coming soon</span>
+            </span>
+            <input type="checkbox" checked={settings.darkMode} disabled className="size-5 cursor-not-allowed accent-cyan-600" />
+          </label>
+        </section>
 
-        {/* Support Section */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <HelpCircle size={20} />
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="mb-5 flex items-center gap-2 text-lg font-black text-slate-950">
+            <HelpCircle size={20} className="text-cyan-600" />
             Support & Help
           </h2>
-          <div className="space-y-3">
-            <a
-              href="#"
-              className="block p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors"
-            >
-              <p className="font-medium text-blue-600">Documentation</p>
-              <p className="text-sm text-gray-600">View the complete user guide</p>
-            </a>
-            <a
-              href="#"
-              className="block p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors"
-            >
-              <p className="font-medium text-blue-600">Contact Support</p>
-              <p className="text-sm text-gray-600">Reach out to our support team</p>
-            </a>
-            <a
-              href="#"
-              className="block p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors"
-            >
-              <p className="font-medium text-blue-600">API Documentation</p>
-              <p className="text-sm text-gray-600">Integrate CoreFleet with your systems</p>
-            </a>
+          <div className="grid gap-3">
+            {['Documentation', 'Contact Support', 'API Documentation'].map((item) => (
+              <a
+                key={item}
+                href="#"
+                className="block rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:bg-cyan-50 hover:shadow-md"
+              >
+                <p className="font-black text-cyan-700">{item}</p>
+                <p className="text-sm text-slate-500">Open {item.toLowerCase()} resources.</p>
+              </a>
+            ))}
           </div>
-        </div>
+        </section>
 
-        {/* Save & Logout Buttons */}
-        <div className="flex gap-3 sticky bottom-0 bg-gray-50 border-t border-gray-200 p-4 -mx-8 px-8">
+        <div className="sticky bottom-20 flex flex-col gap-3 rounded-3xl border border-slate-200 bg-white/95 p-4 shadow-2xl shadow-slate-950/10 backdrop-blur sm:flex-row xl:bottom-6">
           <button
             onClick={handleSaveSettings}
-            className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold transition-colors"
+            className="flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-6 py-3 font-black text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
           >
             <Save size={20} />
             Save Settings
           </button>
           {saved && (
-            <div className="flex items-center text-green-600 text-sm">
-              ✓ Settings saved successfully
+            <div className="flex items-center justify-center rounded-xl bg-emerald-50 px-4 py-3 text-sm font-black text-emerald-700 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              Settings saved successfully
             </div>
           )}
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg font-semibold transition-colors ml-auto"
+            className="flex items-center justify-center gap-2 rounded-xl bg-rose-600 px-6 py-3 font-black text-white transition hover:-translate-y-0.5 hover:bg-rose-700 sm:ml-auto"
           >
             <LogOut size={20} />
             Logout

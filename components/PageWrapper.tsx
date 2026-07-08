@@ -26,12 +26,14 @@ export function PageWrapper({ children }: PageWrapperProps) {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-slate-50 text-slate-950">
       <Sidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <Topbar />
-        <main className="flex-1 overflow-y-auto p-8">
-          {children}
+        <main className="flex-1 overflow-y-auto px-4 pb-24 pt-6 sm:px-6 lg:px-8 xl:pb-6">
+          <div className="mx-auto w-full max-w-7xl animate-in fade-in slide-in-from-bottom-3 duration-500">
+            {children}
+          </div>
         </main>
       </div>
     </div>
