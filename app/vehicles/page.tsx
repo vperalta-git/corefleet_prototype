@@ -51,10 +51,32 @@ export default function VehiclesPage() {
         speed: 0,
         odometer: 0,
         fuelLevel: 100,
+        fuelLoad: 70,
+        fuelCapacity: 70,
+        fuelConsumption: 0,
+        ignition: 'off',
+        address: 'Manila fleet yard',
+        engineTemperature: 70,
+        batteryVoltage: 12.8,
+        engineStatus: 'Ready',
+        oilPressure: 0,
+        coolantLevel: 'Normal',
+        lastService: 'Not recorded',
+        gpsSignal: 'Strong',
+        loadWeight: 0,
+        tirePressure: { frontLeft: 34, frontRight: 34, rearLeft: 35, rearRight: 35 },
+        telemetryHistory: [
+          { time: '00:00', speed: 0, fuelConsumption: 0, engineTemperature: 70, batteryVoltage: 12.8 },
+          { time: '02:00', speed: 0, fuelConsumption: 0, engineTemperature: 70, batteryVoltage: 12.8 },
+          { time: '04:00', speed: 0, fuelConsumption: 0, engineTemperature: 70, batteryVoltage: 12.8 },
+          { time: '06:00', speed: 0, fuelConsumption: 0, engineTemperature: 70, batteryVoltage: 12.8 },
+          { time: '08:00', speed: 0, fuelConsumption: 0, engineTemperature: 70, batteryVoltage: 12.8 },
+          { time: '10:00', speed: 0, fuelConsumption: 0, engineTemperature: 70, batteryVoltage: 12.8 },
+          { time: '12:00', speed: 0, fuelConsumption: 0, engineTemperature: 70, batteryVoltage: 12.8 },
+        ],
         lastUpdated: new Date().toISOString(),
       };
-      getVehicles().push(newVehicle);
-      saveVehicles(getVehicles());
+      saveVehicles([...getVehicles(), newVehicle]);
     }
     setVehicles(getVehicles());
     setShowModal(false);

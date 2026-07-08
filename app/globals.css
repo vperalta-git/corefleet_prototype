@@ -1,2 +1,150 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+.dark body,
+.dark .bg-slate-50 {
+  background-color: #020617 !important;
+}
+
+.dark .bg-white,
+.dark .bg-white\/95,
+.dark .bg-white\/90,
+.dark .bg-white\/85,
+.dark .bg-white\/80 {
+  background-color: #0f172a !important;
+}
+
+.dark .bg-slate-100,
+.dark .bg-slate-50,
+.dark .bg-sky-50,
+.dark .bg-sky-50\/80,
+.dark .bg-sky-50\/70,
+.dark .bg-blue-50,
+.dark .bg-cyan-50 {
+  background-color: #111c33 !important;
+}
+
+.dark .border-slate-200,
+.dark .border-slate-100,
+.dark .border-sky-200,
+.dark .border-sky-100,
+.dark .border-blue-100,
+.dark .border-cyan-100 {
+  border-color: #1e3a5f !important;
+}
+
+.dark .text-slate-950,
+.dark .text-slate-900,
+.dark .text-blue-950 {
+  color: #f8fafc !important;
+}
+
+.dark .text-slate-700,
+.dark .text-slate-600,
+.dark .text-slate-500 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-blue-700,
+.dark .text-sky-700,
+.dark .text-cyan-700,
+.dark .text-blue-800,
+.dark .text-blue-900 {
+  color: #7dd3fc !important;
+}
+
+.dark .shadow-slate-950\/10,
+.dark .shadow-slate-950\/15,
+.dark .shadow-slate-950\/20,
+.dark .shadow-sky-100\/60,
+.dark .shadow-sky-100\/70,
+.dark .shadow-sky-200\/60 {
+  --tw-shadow-color: rgb(0 0 0 / 0.35) !important;
+}
+
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: #0b1220 !important;
+  border-color: #1e3a5f !important;
+  color: #f8fafc !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+.dark .from-white {
+  --tw-gradient-from: #0f172a var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgb(15 23 42 / 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-via), var(--tw-gradient-to) !important;
+}
+
+.dark .via-white {
+  --tw-gradient-via: #111c33 var(--tw-gradient-via-position) !important;
+}
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: 1.875rem !important;
+    line-height: 2.25rem !important;
+  }
+
+  .rounded-3xl {
+    border-radius: 1.125rem !important;
+  }
+
+  .p-8 {
+    padding: 1.25rem !important;
+  }
+
+  .p-6 {
+    padding: 1rem !important;
+  }
+
+  .p-5 {
+    padding: 0.875rem !important;
+  }
+
+  .gap-8 {
+    gap: 1rem !important;
+  }
+
+  .gap-6 {
+    gap: 0.875rem !important;
+  }
+
+  .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.875rem !important;
+  }
+
+  .text-4xl {
+    font-size: 1.875rem !important;
+    line-height: 2.25rem !important;
+  }
+
+  .text-3xl {
+    font-size: 1.5rem !important;
+    line-height: 2rem !important;
+  }
+
+  .recharts-wrapper,
+  .recharts-surface {
+    max-width: 100% !important;
+  }
+
+  table {
+    min-width: 720px;
+  }
+}

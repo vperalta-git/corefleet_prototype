@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { PageWrapper } from '@/components/PageWrapper';
 import { Vehicle } from '@/lib/types';
 import { getVehicles } from '@/lib/storage';
-import { Compass, Droplet, Gauge, Zap } from 'lucide-react';
+import { Battery, Compass, Droplet, Gauge, MapPin, Power, Thermometer, Truck } from 'lucide-react';
 import { Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export default function TelemetryPage() {
@@ -20,53 +20,18 @@ export default function TelemetryPage() {
   }, []);
 
   const selectedVehicle = vehicles.find((v) => v.id === selectedVehicleId);
-
-  const speedData = [
-    { time: '00:00', speed: 0 },
-    { time: '02:00', speed: 25 },
-    { time: '04:00', speed: 45 },
-    { time: '06:00', speed: 38 },
-    { time: '08:00', speed: 52 },
-    { time: '10:00', speed: 48 },
-    { time: '12:00', speed: 35 },
-  ];
-
-  const fuelConsumptionData = [
-    { time: '00:00', consumption: 0 },
-    { time: '02:00', consumption: 2.5 },
-    { time: '04:00', consumption: 5.8 },
-    { time: '06:00', consumption: 8.2 },
-    { time: '08:00', consumption: 11.5 },
-    { time: '10:00', consumption: 14.2 },
-    { time: '12:00', consumption: 16.8 },
-  ];
-
-  const engineTempData = [
-    { time: '00:00', temp: 65 },
-    { time: '02:00', temp: 72 },
-    { time: '04:00', temp: 85 },
-    { time: '06:00', temp: 92 },
-    { time: '08:00', temp: 95 },
-    { time: '10:00', temp: 88 },
-    { time: '12:00', temp: 78 },
-  ];
-
-  const batteryVoltageData = [
-    { time: '00:00', voltage: 13.2 },
-    { time: '02:00', voltage: 13.5 },
-    { time: '04:00', voltage: 13.8 },
-    { time: '06:00', voltage: 14.0 },
-    { time: '08:00', voltage: 14.2 },
-    { time: '10:00', voltage: 13.9 },
-    { time: '12:00', voltage: 13.5 },
-  ];
+  const telemetryData = selectedVehicle?.telemetryHistory ?? [];
 
   const metricCards = selectedVehicle
     ? [
         { label: 'Speed', value: selectedVehicle.speed, unit: 'km/h', icon: Gauge, color: 'text-cyan-500' },
-        { label: 'Engine Temp', value: 92, unit: 'deg C', icon: Zap, color: 'text-orange-500' },
-        { label: 'Fuel Level', value: selectedVehicle.fuelLevel, unit: '%', icon: Droplet, color: 'text-emerald-500' },
-        { label: 'Battery', value: 14.2, unit: 'V', icon: Compass, color: 'text-rose-500' },
+        { label: 'Ignition', value: selectedVehicle.ignition === 'on' ? 'On' : 'Off', unit: selectedVehicle.engineStatus, icon: Power, color: 'text-slate-700' },
+        { label: 'Fuel Load', value: selectedVehicle.fuelLoad, unit: `L / ${selectedVehicle.fuelCapacity} L`, icon: Droplet, color: 'text-emerald-500' },
+        { label: 'Fuel Use', value: selectedVehicle.fuelConsumption, unit: 'L/100 km', icon: Truck, color: 'text-amber-500' },
+        { label: 'Engine Temp', value: selectedVehicle.engineTemperature, unit: 'deg C', icon: Thermometer, color: 'text-orange-500' },
+        { label: 'Battery', value: selectedVehicle.batteryVoltage, unit: 'V', icon: Battery, color: 'text-rose-500' },
+        { label: 'Load', value: selectedVehicle.loadWeight.toLocaleString(), unit: 'kg', icon: Compass, color: 'text-violet-500' },
+        { label: 'GPS', value: selectedVehicle.gpsSignal, unit: selectedVehicle.address, icon: MapPin, color: 'text-cyan-600' },
       ]
     : [];
 
@@ -95,18 +60,18 @@ export default function TelemetryPage() {
         </div>
 
         {selectedVehicle && (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
             {metricCards.map((metric) => {
               const Icon = metric.icon;
               return (
                 <div key={metric.label} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
                   <div className="flex items-center justify-between">
-                    <div>
+                    <div className="min-w-0">
                       <p className="text-xs font-black uppercase tracking-[0.14em] text-slate-500">{metric.label}</p>
-                      <p className="mt-1 text-3xl font-black text-slate-950">{metric.value}</p>
-                      <p className="text-xs font-semibold text-slate-500">{metric.unit}</p>
+                      <p className="mt-1 break-words text-3xl font-black text-slate-950">{metric.value}</p>
+                      <p className="line-clamp-2 text-xs font-semibold text-slate-500">{metric.unit}</p>
                     </div>
-                    <Icon size={32} className={metric.color} />
+                    <Icon size={32} className={`${metric.color} shrink-0`} />
                   </div>
                 </div>
               );
@@ -118,7 +83,7 @@ export default function TelemetryPage() {
           <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
             <h3 className="mb-4 text-lg font-black text-slate-950">Speed Over Time</h3>
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={speedData}>
+              <LineChart data={telemetryData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="time" />
                 <YAxis />
@@ -131,7 +96,7 @@ export default function TelemetryPage() {
           <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
             <h3 className="mb-4 text-lg font-black text-slate-950">Cumulative Fuel Consumption</h3>
             <ResponsiveContainer width="100%" height={300}>
-              <AreaChart data={fuelConsumptionData}>
+              <AreaChart data={telemetryData}>
                 <defs>
                   <linearGradient id="colorFuel" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.8} />
@@ -142,7 +107,7 @@ export default function TelemetryPage() {
                 <XAxis dataKey="time" />
                 <YAxis />
                 <Tooltip />
-                <Area type="monotone" dataKey="consumption" stroke="#f59e0b" fillOpacity={1} fill="url(#colorFuel)" />
+                <Area type="monotone" dataKey="fuelConsumption" stroke="#f59e0b" fillOpacity={1} fill="url(#colorFuel)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -150,12 +115,12 @@ export default function TelemetryPage() {
           <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
             <h3 className="mb-4 text-lg font-black text-slate-950">Engine Temperature</h3>
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={engineTempData}>
+              <LineChart data={telemetryData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="time" />
                 <YAxis domain={[50, 110]} />
                 <Tooltip />
-                <Line type="monotone" dataKey="temp" stroke="#ef4444" strokeWidth={3} dot={{ fill: '#ef4444', r: 4 }} activeDot={{ r: 6 }} />
+                <Line type="monotone" dataKey="engineTemperature" stroke="#ef4444" strokeWidth={3} dot={{ fill: '#ef4444', r: 4 }} activeDot={{ r: 6 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -163,12 +128,12 @@ export default function TelemetryPage() {
           <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
             <h3 className="mb-4 text-lg font-black text-slate-950">Battery Voltage</h3>
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={batteryVoltageData}>
+              <LineChart data={telemetryData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="time" />
                 <YAxis domain={[12, 15]} />
                 <Tooltip />
-                <Line type="monotone" dataKey="voltage" stroke="#10b981" strokeWidth={3} dot={{ fill: '#10b981', r: 4 }} activeDot={{ r: 6 }} />
+                <Line type="monotone" dataKey="batteryVoltage" stroke="#10b981" strokeWidth={3} dot={{ fill: '#10b981', r: 4 }} activeDot={{ r: 6 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -179,11 +144,11 @@ export default function TelemetryPage() {
           <div className="grid grid-cols-2 gap-4 text-sm md:grid-cols-3 lg:grid-cols-6">
             {[
               ['Odometer', `${selectedVehicle?.odometer.toLocaleString() || 0} km`, 'text-slate-950'],
-              ['Engine Status', 'Optimal', 'text-emerald-600'],
-              ['Emissions', 'Normal', 'text-emerald-600'],
-              ['Oil Pressure', '4.2 bar', 'text-slate-950'],
-              ['Coolant Level', 'Normal', 'text-emerald-600'],
-              ['Last Service', '45 days ago', 'text-slate-950'],
+              ['Engine Status', selectedVehicle?.engineStatus || 'Unknown', selectedVehicle?.status === 'maintenance' || selectedVehicle?.status === 'offline' ? 'text-amber-600' : 'text-emerald-600'],
+              ['Oil Pressure', `${selectedVehicle?.oilPressure || 0} bar`, 'text-slate-950'],
+              ['Coolant Level', selectedVehicle?.coolantLevel || 'Unknown', selectedVehicle?.coolantLevel === 'Normal' ? 'text-emerald-600' : 'text-amber-600'],
+              ['Tire Pressure', selectedVehicle ? `${selectedVehicle.tirePressure.frontLeft}/${selectedVehicle.tirePressure.frontRight}/${selectedVehicle.tirePressure.rearLeft}/${selectedVehicle.tirePressure.rearRight} PSI` : '0 PSI', 'text-slate-950'],
+              ['Last Service', selectedVehicle?.lastService || 'Not recorded', 'text-slate-950'],
             ].map(([label, value, color]) => (
               <div key={label} className="rounded-2xl bg-slate-50 p-4">
                 <p className="mb-1 text-slate-500">{label}</p>

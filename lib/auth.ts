@@ -1,4 +1,5 @@
 import { AuthState, User } from './types';
+import { getUsers } from './storage';
 
 const STORAGE_KEY = 'corefleet_auth';
 const DEFAULT_USER: User = {
@@ -28,15 +29,26 @@ export function setAuthState(state: AuthState): void {
 }
 
 export function login(email: string, password: string): boolean {
-  // Demo credentials
-  if (email === 'admin@corefleet.com' && password === 'admin') {
+  const matchedUser = getUsers().find(
+    (user) => user.email.toLowerCase() === email.toLowerCase() && user.password === password,
+  );
+
+  if (matchedUser) {
+    const { password: _password, ...safeUser } = matchedUser;
     const authState: AuthState = {
       isAuthenticated: true,
-      user: DEFAULT_USER,
+      user: safeUser,
     };
     setAuthState(authState);
     return true;
   }
+
+  // Demo credentials fallback for any older browser state.
+  if (email === DEFAULT_USER.email && password === 'admin') {
+    setAuthState({ isAuthenticated: true, user: DEFAULT_USER });
+    return true;
+  }
+
   return false;
 }
 

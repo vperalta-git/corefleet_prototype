@@ -9,13 +9,39 @@ export interface Vehicle {
   name: string;
   driver: string;
   status: VehicleStatus;
+  ignition: 'on' | 'off';
   location: {
     lat: number;
     lng: number;
   };
+  address: string;
   speed: number;
   odometer: number;
   fuelLevel: number;
+  fuelLoad: number;
+  fuelCapacity: number;
+  fuelConsumption: number;
+  engineTemperature: number;
+  batteryVoltage: number;
+  engineStatus: string;
+  oilPressure: number;
+  coolantLevel: string;
+  lastService: string;
+  gpsSignal: string;
+  loadWeight: number;
+  tirePressure: {
+    frontLeft: number;
+    frontRight: number;
+    rearLeft: number;
+    rearRight: number;
+  };
+  telemetryHistory: {
+    time: string;
+    speed: number;
+    fuelConsumption: number;
+    engineTemperature: number;
+    batteryVoltage: number;
+  }[];
   lastUpdated: string;
 }
 
@@ -49,6 +75,7 @@ export interface User {
   email: string;
   name: string;
   role: 'admin' | 'operator' | 'viewer';
+  password?: string;
 }
 
 export interface AuthState {

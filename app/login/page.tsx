@@ -3,10 +3,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { login } from '@/lib/auth';
-import { ArrowRight, RadioTower, ShieldCheck, Truck } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { useTheme } from '@/components/ThemeProvider';
+import { ArrowRight, ShieldCheck, Truck } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
+  const { theme } = useTheme();
   const [email, setEmail] = useState('admin@corefleet.com');
   const [password, setPassword] = useState('admin');
   const [error, setError] = useState('');
@@ -27,8 +30,16 @@ export default function LoginPage() {
     setIsLoading(false);
   };
 
+  const logoSrc =
+    theme === 'dark'
+      ? '/logos/Coretech_Logo_Dark_Background.png'
+      : '/logos/Coretech_Logo_Light_Background.png';
+
   return (
     <div className="min-h-screen overflow-hidden bg-slate-950 text-white">
+      <div className="fixed right-4 top-4 z-20">
+        <ThemeToggle />
+      </div>
       <div className="grid min-h-screen lg:grid-cols-[1.1fr_0.9fr]">
         <section className="relative hidden items-center justify-center overflow-hidden p-10 lg:flex">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(34,211,238,0.24),transparent_28%),radial-gradient(circle_at_80%_70%,rgba(16,185,129,0.18),transparent_30%)]" />
@@ -37,7 +48,7 @@ export default function LoginPage() {
               <ShieldCheck size={16} />
               Fleet operations, dispatch, telemetry
             </div>
-            <h1 className="text-6xl font-black tracking-tight">CoreFleet</h1>
+            <img src="/logos/Coretech_Logo_Dark_Background.png" alt="Coretech" className="h-20 w-auto object-contain" />
             <p className="mt-5 max-w-xl text-lg leading-8 text-slate-300">
               A sharper command center for live vehicles, driver activity, trips, alerts, and diagnostics.
             </p>
@@ -60,10 +71,7 @@ export default function LoginPage() {
           <div className="w-full max-w-md animate-in fade-in zoom-in-95 duration-500">
             <div className="mb-8 text-center">
               <div className="mb-4 flex items-center justify-center gap-3">
-                <div className="grid size-13 place-items-center rounded-2xl bg-cyan-500 text-white shadow-lg shadow-cyan-500/30">
-                  <RadioTower size={30} />
-                </div>
-                <h1 className="text-3xl font-black tracking-tight text-slate-950">CoreFleet</h1>
+                <img src={logoSrc} alt="Coretech" className="h-16 w-auto object-contain" />
               </div>
               <p className="text-sm font-medium text-slate-500">Fleet Management Dashboard</p>
             </div>
