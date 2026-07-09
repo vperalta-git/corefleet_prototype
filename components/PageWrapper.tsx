@@ -35,7 +35,7 @@ export function PageWrapper({ children }: PageWrapperProps) {
       <AppSidebar />
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <Topbar />
-        <main className="flex-1 overflow-y-auto overflow-x-hidden px-3 pb-20 pt-4 sm:px-5 sm:pt-5 lg:px-8 xl:pb-6">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden px-3 pb-20 pt-3 sm:px-4 sm:pt-4 lg:px-5 xl:pb-5">
           <div className="mx-auto w-full max-w-[1600px] animate-in fade-in slide-in-from-bottom-3 duration-500">
             {children}
           </div>

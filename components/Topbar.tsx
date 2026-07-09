@@ -34,14 +34,14 @@ export function Topbar() {
   const title = pageTitles[pathname] || 'Fleet Dashboard';
 
   return (
-    <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/85 px-3 py-2.5 backdrop-blur-xl sm:px-6 sm:py-3 lg:px-8">
+    <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/85 px-3 py-2 backdrop-blur-xl sm:px-4 lg:px-5">
       <div className="flex items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3 sm:gap-4">
           <SidebarTrigger />
           <div className="min-w-0">
-            <p className="hidden text-xs font-semibold uppercase tracking-[0.2em] text-cyan-600 sm:block">Operations</p>
-            <h2 className="truncate text-lg font-black tracking-tight text-slate-950 sm:text-2xl">{title}</h2>
-            <p className="mt-0.5 hidden text-sm text-slate-500 sm:block">Welcome back, {user?.name || 'User'}</p>
+            <p className="hidden text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-cyan-600 md:block">Operations</p>
+            <h2 className="truncate text-lg font-black tracking-tight text-slate-950 sm:text-xl">{title}</h2>
+            <p className="mt-0.5 hidden text-xs text-slate-500 xl:block">Welcome back, {user?.name || 'User'}</p>
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
