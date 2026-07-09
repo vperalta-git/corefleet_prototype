@@ -30,10 +30,6 @@ export default function LoginPage() {
     setIsLoading(false);
   };
 
-  const logoSrc =
-    theme === 'dark'
-      ? '/logos/Coretech_Logo_Dark_Background.png'
-      : '/logos/Coretech_Logo_Light_Background.png';
   const faviconSrc = theme === 'dark' ? '/logos/favicon_dark.png' : '/logos/favicon_light.png';
 
   return (
@@ -49,12 +45,18 @@ export default function LoginPage() {
               <ShieldCheck size={16} />
               Fleet operations, dispatch, telemetry
             </div>
-            <div className="inline-flex rounded-2xl border border-cyan-300/25 bg-[#030b1f]/80 p-4 shadow-2xl shadow-sky-500/20 backdrop-blur">
-              <img
-                src="/logos/Coretech_Logo_Dark_Background.png"
-                alt="Coretech"
-                className="h-24 w-[23rem] object-cover object-center"
-              />
+            <div className="inline-flex items-center gap-5 rounded-2xl border border-cyan-300/25 bg-[#03122d]/85 px-6 py-5 shadow-2xl shadow-sky-500/20 backdrop-blur">
+              <div className="flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-sky-950 ring-1 ring-cyan-300/30">
+                <img src="/logos/favicon_dark.png" alt="" className="size-24 object-cover object-center" />
+              </div>
+              <div>
+                <p className="text-5xl font-black leading-none tracking-normal text-white">
+                  CORE<span className="text-cyan-300">TECH</span>
+                </p>
+                <p className="mt-2 text-sm font-black uppercase tracking-[0.2em] text-sky-200">
+                  Innovations and Solutions, Inc.
+                </p>
+              </div>
             </div>
             <p className="mt-5 max-w-xl text-lg leading-8 text-slate-300">
               A sharper command center for live vehicles, driver activity, trips, alerts, and diagnostics.
@@ -78,16 +80,17 @@ export default function LoginPage() {
           <div className="w-full max-w-md animate-in fade-in zoom-in-95 duration-500">
             <div className="mb-7 text-center">
               <div className="mb-4 flex justify-center">
-                <div className="relative flex w-full max-w-[22rem] items-center gap-4 rounded-2xl border border-sky-200 bg-white p-3 shadow-xl shadow-sky-200/40 dark:border-sky-500/30 dark:bg-[#030b1f] dark:shadow-sky-950/40">
-                  <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-sky-950 shadow-lg shadow-sky-500/20 dark:bg-sky-950">
-                    <img src={faviconSrc} alt="" className="size-14 object-cover object-center" />
+                <div className="relative flex w-full max-w-[26rem] items-center gap-4 rounded-3xl border border-sky-200 bg-white px-5 py-4 shadow-2xl shadow-sky-200/50 dark:border-sky-500/30 dark:bg-[#03122d] dark:shadow-sky-950/50">
+                  <div className="flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-sky-950 shadow-lg shadow-sky-500/25 ring-1 ring-sky-300/25">
+                    <img src={faviconSrc} alt="" className="size-24 object-cover object-center" />
                   </div>
-                  <div className="min-w-0 flex-1 overflow-hidden rounded-xl bg-[#071733] dark:bg-[#030814]">
-                    <img
-                      src={logoSrc}
-                      alt="Coretech"
-                      className="h-20 w-full object-cover object-center"
-                    />
+                  <div className="min-w-0 flex-1 text-left">
+                    <p className="text-3xl font-black leading-none tracking-normal text-slate-950 dark:text-white">
+                      CORE<span className="text-sky-500 dark:text-cyan-300">TECH</span>
+                    </p>
+                    <p className="mt-1 truncate text-[0.7rem] font-black uppercase tracking-[0.16em] text-sky-700 dark:text-sky-200">
+                      Innovations and Solutions, Inc.
+                    </p>
                   </div>
                 </div>
               </div>
