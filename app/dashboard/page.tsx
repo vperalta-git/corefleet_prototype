@@ -6,7 +6,7 @@ import { StatCard } from '@/components/StatCard';
 import { Vehicle, Alert } from '@/lib/types';
 import { getVehicles, getAlerts } from '@/lib/storage';
 import { Truck, AlertTriangle, TrendingUp, Fuel } from 'lucide-react';
-import { PieChart, Pie, Cell, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function DashboardPage() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -62,32 +62,32 @@ export default function DashboardPage() {
 
   return (
     <PageWrapper>
-      <div className="space-y-8">
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div>
+      <div className="space-y-4 sm:space-y-5 xl:space-y-6">
+        <div className="overflow-hidden rounded-2xl border border-sky-200 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-5">
+          <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+            <div className="min-w-0">
               <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">Live Overview</p>
-              <h1 className="mt-2 text-4xl font-black tracking-tight text-slate-950">Dashboard</h1>
-              <p className="mt-2 max-w-2xl text-slate-500">Real-time fleet monitoring, vehicle health, and alert analytics in one workspace.</p>
+              <h1 className="mt-1 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">Dashboard</h1>
+              <p className="mt-1 max-w-2xl text-sm text-slate-500 sm:text-base">Real-time fleet monitoring, vehicle health, and alert analytics in one workspace.</p>
             </div>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              <div className="rounded-2xl bg-slate-950 px-4 py-3 text-white">
+            <div className="grid w-full grid-cols-1 gap-2 min-[420px]:grid-cols-3 xl:max-w-[520px]">
+              <div className="min-w-0 rounded-2xl bg-slate-950 px-3 py-2.5 text-white">
                 <p className="text-xs text-slate-400">Mileage</p>
-                <p className="text-lg font-black">{totalMileage.toLocaleString()} km</p>
+                <p className="truncate text-base font-black sm:text-lg">{totalMileage.toLocaleString()} km</p>
               </div>
-              <div className="rounded-2xl bg-cyan-50 px-4 py-3">
+              <div className="min-w-0 rounded-2xl bg-cyan-50 px-3 py-2.5">
                 <p className="text-xs text-cyan-700">Fuel Avg</p>
-                <p className="text-lg font-black text-slate-950">{averageFuelLevel}%</p>
+                <p className="truncate text-base font-black text-slate-950 sm:text-lg">{averageFuelLevel}%</p>
               </div>
-              <div className="rounded-2xl bg-rose-50 px-4 py-3">
+              <div className="min-w-0 rounded-2xl bg-rose-50 px-3 py-2.5">
                 <p className="text-xs text-rose-700">Critical</p>
-                <p className="text-lg font-black text-slate-950">{criticalAlerts}</p>
+                <p className="truncate text-base font-black text-slate-950 sm:text-lg">{criticalAlerts}</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4 xl:gap-4">
           <StatCard
             title="Total Vehicles"
             value={vehicles.length}
@@ -118,10 +118,11 @@ export default function DashboardPage() {
           />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
-            <h3 className="mb-4 text-lg font-black text-slate-950">Fleet Status</h3>
-            <ResponsiveContainer width="100%" height={300}>
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2 xl:gap-5">
+          <div className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-xl sm:rounded-3xl sm:p-5">
+            <h3 className="mb-3 text-lg font-black text-slate-950">Fleet Status</h3>
+            <div className="h-[220px] sm:h-[240px] xl:h-[260px]">
+            <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={fleetStatusData}
@@ -139,19 +140,21 @@ export default function DashboardPage() {
                 <Tooltip />
               </PieChart>
             </ResponsiveContainer>
-            <div className="flex justify-center gap-4 mt-4 flex-wrap">
+            </div>
+            <div className="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-2">
               {fleetStatusData.map((item) => (
                 <div key={item.name} className="flex items-center gap-2">
                   <div className="h-3 w-3 rounded-full" style={{ backgroundColor: item.color }}></div>
-                  <span className="text-sm font-semibold text-slate-600">{item.name}: {item.value}</span>
+                  <span className="text-xs font-semibold text-slate-600 sm:text-sm">{item.name}: {item.value}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
-            <h3 className="mb-4 text-lg font-black text-slate-950">Daily Mileage</h3>
-            <ResponsiveContainer width="100%" height={300}>
+          <div className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-xl sm:rounded-3xl sm:p-5">
+            <h3 className="mb-3 text-lg font-black text-slate-950">Daily Mileage</h3>
+            <div className="h-[220px] sm:h-[240px] xl:h-[260px]">
+            <ResponsiveContainer width="100%" height="100%">
               <BarChart data={dailyMileageData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="day" />
@@ -160,11 +163,13 @@ export default function DashboardPage() {
                 <Bar dataKey="distance" fill="#06b6d4" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
+            </div>
           </div>
 
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
-            <h3 className="mb-4 text-lg font-black text-slate-950">Speed Trend</h3>
-            <ResponsiveContainer width="100%" height={300}>
+          <div className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-xl sm:rounded-3xl sm:p-5">
+            <h3 className="mb-3 text-lg font-black text-slate-950">Speed Trend</h3>
+            <div className="h-[220px] sm:h-[240px] xl:h-[260px]">
+            <ResponsiveContainer width="100%" height="100%">
               <LineChart data={speedTrendData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="time" />
@@ -173,32 +178,35 @@ export default function DashboardPage() {
                 <Line type="monotone" dataKey="speed" stroke="#06b6d4" strokeWidth={3} dot={{ fill: '#06b6d4' }} />
               </LineChart>
             </ResponsiveContainer>
+            </div>
           </div>
 
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
-            <h3 className="mb-4 text-lg font-black text-slate-950">Alerts by Type</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={alertsByTypeData} layout="vertical">
+          <div className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-xl sm:rounded-3xl sm:p-5">
+            <h3 className="mb-3 text-lg font-black text-slate-950">Alerts by Type</h3>
+            <div className="h-[220px] sm:h-[240px] xl:h-[260px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={alertsByTypeData} layout="vertical" margin={{ left: 16, right: 12 }}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis type="number" />
-                <YAxis dataKey="type" type="category" />
+                <YAxis dataKey="type" type="category" width={86} />
                 <Tooltip />
                 <Bar dataKey="count" fill="#0f172a" radius={[0, 8, 8, 0]} />
               </BarChart>
             </ResponsiveContainer>
+            </div>
           </div>
         </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h3 className="mb-4 text-lg font-black text-slate-950">Recent Alerts</h3>
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-5">
+          <h3 className="mb-3 text-lg font-black text-slate-950">Recent Alerts</h3>
           <div className="space-y-3">
             {alerts.slice(0, 5).map((alert) => (
-              <div key={alert.id} className="flex items-start justify-between rounded-2xl border border-slate-100 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:bg-white hover:shadow-md">
-                <div className="flex-1">
+              <div key={alert.id} className="flex flex-col gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:bg-white hover:shadow-md sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0 flex-1">
                   <p className="font-black text-slate-950">{alert.vehicleName}</p>
                   <p className="text-sm text-slate-600">{alert.message}</p>
                 </div>
-                <div className="text-right">
+                <div className="shrink-0 sm:text-right">
                   <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${
                     alert.severity === 'critical' ? 'bg-rose-100 text-rose-800' :
                     alert.severity === 'warning' ? 'bg-amber-100 text-amber-800' :
