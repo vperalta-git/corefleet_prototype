@@ -87,8 +87,8 @@ export default function TelemetryPage() {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="time" />
                 <YAxis />
-                <Tooltip />
-                <Line type="monotone" dataKey="speed" stroke="#06b6d4" strokeWidth={3} dot={{ fill: '#06b6d4', r: 4 }} activeDot={{ r: 6 }} />
+                <Tooltip isAnimationActive={false} />
+                <Line type="monotone" dataKey="speed" stroke="#06b6d4" strokeWidth={3} dot={{ fill: '#06b6d4', r: 3 }} activeDot={false} isAnimationActive={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -106,8 +106,8 @@ export default function TelemetryPage() {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="time" />
                 <YAxis />
-                <Tooltip />
-                <Area type="monotone" dataKey="fuelConsumption" stroke="#f59e0b" fillOpacity={1} fill="url(#colorFuel)" />
+                <Tooltip isAnimationActive={false} />
+                <Area type="monotone" dataKey="fuelConsumption" stroke="#f59e0b" fillOpacity={1} fill="url(#colorFuel)" isAnimationActive={false} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -119,8 +119,8 @@ export default function TelemetryPage() {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="time" />
                 <YAxis domain={[50, 110]} />
-                <Tooltip />
-                <Line type="monotone" dataKey="engineTemperature" stroke="#ef4444" strokeWidth={3} dot={{ fill: '#ef4444', r: 4 }} activeDot={{ r: 6 }} />
+                <Tooltip isAnimationActive={false} />
+                <Line type="monotone" dataKey="engineTemperature" stroke="#ef4444" strokeWidth={3} dot={{ fill: '#ef4444', r: 3 }} activeDot={false} isAnimationActive={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -132,8 +132,8 @@ export default function TelemetryPage() {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="time" />
                 <YAxis domain={[12, 15]} />
-                <Tooltip />
-                <Line type="monotone" dataKey="batteryVoltage" stroke="#10b981" strokeWidth={3} dot={{ fill: '#10b981', r: 4 }} activeDot={{ r: 6 }} />
+                <Tooltip isAnimationActive={false} />
+                <Line type="monotone" dataKey="batteryVoltage" stroke="#10b981" strokeWidth={3} dot={{ fill: '#10b981', r: 3 }} activeDot={false} isAnimationActive={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>

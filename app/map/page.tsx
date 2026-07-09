@@ -573,8 +573,8 @@ export default function MapPage() {
                         <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#1e3a5f' : '#cbd5e1'} />
                         <XAxis dataKey="time" stroke={isDark ? '#bae6fd' : '#475569'} />
                         <YAxis stroke={isDark ? '#bae6fd' : '#475569'} />
-                        <Tooltip />
-                        <Line type="monotone" dataKey="speed" stroke="#0284c7" strokeWidth={3} dot={{ fill: '#0284c7', r: 4 }} activeDot={{ r: 6 }} />
+                        <Tooltip isAnimationActive={false} />
+                        <Line type="monotone" dataKey="speed" stroke="#0284c7" strokeWidth={3} dot={{ fill: '#0284c7', r: 3 }} activeDot={false} isAnimationActive={false} />
                       </LineChart>
                     </ResponsiveContainer>
                   </section>
@@ -595,8 +595,8 @@ export default function MapPage() {
                         <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#1e3a5f' : '#cbd5e1'} />
                         <XAxis dataKey="time" stroke={isDark ? '#bae6fd' : '#475569'} />
                         <YAxis stroke={isDark ? '#bae6fd' : '#475569'} />
-                        <Tooltip />
-                        <Area type="monotone" dataKey="fuelConsumption" stroke="#10b981" strokeWidth={3} fill="url(#vehicleFuelGradient)" />
+                        <Tooltip isAnimationActive={false} />
+                        <Area type="monotone" dataKey="fuelConsumption" stroke="#10b981" strokeWidth={3} fill="url(#vehicleFuelGradient)" isAnimationActive={false} />
                       </AreaChart>
                     </ResponsiveContainer>
                   </section>
@@ -611,8 +611,8 @@ export default function MapPage() {
                         <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#1e3a5f' : '#cbd5e1'} />
                         <XAxis dataKey="time" stroke={isDark ? '#bae6fd' : '#475569'} />
                         <YAxis stroke={isDark ? '#bae6fd' : '#475569'} />
-                        <Tooltip />
-                        <Line type="monotone" dataKey="engineTemperature" stroke="#f97316" strokeWidth={3} dot={{ fill: '#f97316', r: 4 }} />
+                        <Tooltip isAnimationActive={false} />
+                        <Line type="monotone" dataKey="engineTemperature" stroke="#f97316" strokeWidth={3} dot={{ fill: '#f97316', r: 3 }} activeDot={false} isAnimationActive={false} />
                       </LineChart>
                     </ResponsiveContainer>
                   </section>
@@ -627,8 +627,8 @@ export default function MapPage() {
                         <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#1e3a5f' : '#cbd5e1'} />
                         <XAxis dataKey="time" stroke={isDark ? '#bae6fd' : '#475569'} />
                         <YAxis domain={[12, 15]} stroke={isDark ? '#bae6fd' : '#475569'} />
-                        <Tooltip />
-                        <Line type="monotone" dataKey="batteryVoltage" stroke="#2563eb" strokeWidth={3} dot={{ fill: '#2563eb', r: 4 }} />
+                        <Tooltip isAnimationActive={false} />
+                        <Line type="monotone" dataKey="batteryVoltage" stroke="#2563eb" strokeWidth={3} dot={{ fill: '#2563eb', r: 3 }} activeDot={false} isAnimationActive={false} />
                       </LineChart>
                     </ResponsiveContainer>
                   </section>

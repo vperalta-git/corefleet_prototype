@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { PageWrapper } from '@/components/PageWrapper';
 import { StatCard } from '@/components/StatCard';
 import { useTheme } from '@/components/ThemeProvider';
@@ -19,25 +19,40 @@ export default function DashboardPage() {
     setAlerts(getAlerts());
   }, []);
 
-  // Calculate stats
-  const activeVehicles = vehicles.filter(v => v.status === 'active').length;
-  const idleVehicles = vehicles.filter(v => v.status === 'idle').length;
-  const maintenanceVehicles = vehicles.filter(v => v.status === 'maintenance').length;
-  const offlineVehicles = vehicles.filter(v => v.status === 'offline').length;
+  const stats = useMemo(() => {
+    const activeVehicles = vehicles.filter((v) => v.status === 'active').length;
+    const idleVehicles = vehicles.filter((v) => v.status === 'idle').length;
+    const maintenanceVehicles = vehicles.filter((v) => v.status === 'maintenance').length;
+    const offlineVehicles = vehicles.filter((v) => v.status === 'offline').length;
+    const criticalAlerts = alerts.filter((a) => a.severity === 'critical' && !a.resolved).length;
+    const warningAlerts = alerts.filter((a) => a.severity === 'warning').length;
+    const totalMileage = vehicles.reduce((sum, v) => sum + v.odometer, 0);
+    const averageFuelLevel =
+      vehicles.length > 0 ? Math.round(vehicles.reduce((sum, v) => sum + v.fuelLevel, 0) / vehicles.length) : 0;
 
-  const criticalAlerts = alerts.filter(a => a.severity === 'critical' && !a.resolved).length;
-  const totalMileage = vehicles.reduce((sum, v) => sum + v.odometer, 0);
-  const averageFuelLevel = vehicles.length > 0 ? Math.round(vehicles.reduce((sum, v) => sum + v.fuelLevel, 0) / vehicles.length) : 0;
+    return {
+      activeVehicles,
+      idleVehicles,
+      maintenanceVehicles,
+      offlineVehicles,
+      criticalAlerts,
+      warningAlerts,
+      totalMileage,
+      averageFuelLevel,
+    };
+  }, [alerts, vehicles]);
 
-  // Chart data
-  const fleetStatusData = [
-    { name: 'Active', value: activeVehicles, color: '#22c55e' },
-    { name: 'Idle', value: idleVehicles, color: '#eab308' },
-    { name: 'Maintenance', value: maintenanceVehicles, color: '#f97316' },
-    { name: 'Offline', value: offlineVehicles, color: '#ef4444' },
-  ];
+  const fleetStatusData = useMemo(
+    () => [
+      { name: 'Active', value: stats.activeVehicles, color: '#22c55e' },
+      { name: 'Idle', value: stats.idleVehicles, color: '#eab308' },
+      { name: 'Maintenance', value: stats.maintenanceVehicles, color: '#f97316' },
+      { name: 'Offline', value: stats.offlineVehicles, color: '#ef4444' },
+    ],
+    [stats.activeVehicles, stats.idleVehicles, stats.maintenanceVehicles, stats.offlineVehicles],
+  );
 
-  const dailyMileageData = [
+  const dailyMileageData = useMemo(() => [
     { day: 'Mon', distance: 240 },
     { day: 'Tue', distance: 380 },
     { day: 'Wed', distance: 200 },
@@ -45,33 +60,43 @@ export default function DashboardPage() {
     { day: 'Fri', distance: 320 },
     { day: 'Sat', distance: 270 },
     { day: 'Sun', distance: 180 },
-  ];
+  ], []);
 
-  const speedTrendData = [
+  const speedTrendData = useMemo(() => [
     { time: '08:00', speed: 32 },
     { time: '10:00', speed: 45 },
     { time: '12:00', speed: 38 },
     { time: '14:00', speed: 52 },
     { time: '16:00', speed: 42 },
     { time: '18:00', speed: 35 },
-  ];
+  ], []);
 
-  const alertsByTypeData = [
+  const alertsByTypeData = useMemo(() => [
     { type: 'Maintenance', count: 2, color: '#f97316' },
     { type: 'Offline', count: 1, color: '#ef4444' },
     { type: 'Low Fuel', count: 1, color: '#eab308' },
-  ];
+  ], []);
   const isDark = theme === 'dark';
-  const chartGrid = isDark ? '#334155' : '#cbd5e1';
-  const chartAxis = isDark ? '#cbd5e1' : '#475569';
-  const tooltipStyle = {
-    backgroundColor: isDark ? '#020617' : '#ffffff',
-    border: `1px solid ${isDark ? '#1e3a5f' : '#bae6fd'}`,
-    borderRadius: '12px',
-    color: isDark ? '#f8fafc' : '#0f172a',
-    boxShadow: isDark ? '0 16px 40px rgb(0 0 0 / 0.35)' : '0 16px 40px rgb(15 23 42 / 0.12)',
-  };
-  const tooltipLabelStyle = { color: isDark ? '#7dd3fc' : '#0369a1', fontWeight: 800 };
+  const chartGrid = useMemo(() => (isDark ? '#334155' : '#cbd5e1'), [isDark]);
+  const chartAxis = useMemo(() => (isDark ? '#cbd5e1' : '#475569'), [isDark]);
+  const tooltipStyle = useMemo(
+    () => ({
+      backgroundColor: isDark ? '#020617' : '#ffffff',
+      border: `1px solid ${isDark ? '#1e3a5f' : '#bae6fd'}`,
+      borderRadius: '12px',
+      color: isDark ? '#f8fafc' : '#0f172a',
+      boxShadow: isDark ? '0 16px 40px rgb(0 0 0 / 0.35)' : '0 16px 40px rgb(15 23 42 / 0.12)',
+    }),
+    [isDark],
+  );
+  const tooltipLabelStyle = useMemo(
+    () => ({ color: isDark ? '#7dd3fc' : '#0369a1', fontWeight: 800 }),
+    [isDark],
+  );
+  const chartCursor = useMemo(
+    () => ({ fill: isDark ? 'rgba(14, 165, 233, 0.08)' : 'rgba(14, 165, 233, 0.12)' }),
+    [isDark],
+  );
 
   return (
     <PageWrapper>
@@ -86,15 +111,15 @@ export default function DashboardPage() {
             <div className="grid w-full grid-cols-1 gap-2 min-[420px]:grid-cols-3 xl:max-w-[500px]">
               <div className="min-w-0 rounded-xl bg-slate-950 px-3 py-2 text-white">
                 <p className="text-xs text-slate-400">Mileage</p>
-                <p className="truncate text-base font-black sm:text-lg">{totalMileage.toLocaleString()} km</p>
+                <p className="truncate text-base font-black sm:text-lg">{stats.totalMileage.toLocaleString()} km</p>
               </div>
               <div className="min-w-0 rounded-xl bg-cyan-50 px-3 py-2 dark:bg-slate-900">
                 <p className="text-xs text-cyan-700">Fuel Avg</p>
-                <p className="truncate text-base font-black text-slate-950 sm:text-lg">{averageFuelLevel}%</p>
+                <p className="truncate text-base font-black text-slate-950 sm:text-lg">{stats.averageFuelLevel}%</p>
               </div>
               <div className="min-w-0 rounded-xl bg-rose-50 px-3 py-2 dark:bg-slate-900">
                 <p className="text-xs text-rose-700">Critical</p>
-                <p className="truncate text-base font-black text-slate-950 sm:text-lg">{criticalAlerts}</p>
+                <p className="truncate text-base font-black text-slate-950 sm:text-lg">{stats.criticalAlerts}</p>
               </div>
             </div>
           </div>
@@ -110,21 +135,21 @@ export default function DashboardPage() {
           />
           <StatCard
             title="Active Now"
-            value={activeVehicles}
-            subtitle={`${idleVehicles} idle, ${maintenanceVehicles} maintenance`}
+            value={stats.activeVehicles}
+            subtitle={`${stats.idleVehicles} idle, ${stats.maintenanceVehicles} maintenance`}
             icon={<TrendingUp size={24} />}
             bgColor="bg-emerald-50"
           />
           <StatCard
             title="Alerts"
-            value={criticalAlerts}
-            subtitle={`${criticalAlerts} critical, ${alerts.filter(a => a.severity === 'warning').length} warnings`}
+            value={stats.criticalAlerts}
+            subtitle={`${stats.criticalAlerts} critical, ${stats.warningAlerts} warnings`}
             icon={<AlertTriangle size={24} />}
             bgColor="bg-rose-50"
           />
           <StatCard
             title="Avg Fuel"
-            value={`${averageFuelLevel}%`}
+            value={`${stats.averageFuelLevel}%`}
             subtitle="Fleet average"
             icon={<Fuel size={24} />}
             bgColor="bg-amber-50"
@@ -145,12 +170,13 @@ export default function DashboardPage() {
                   outerRadius={78}
                   paddingAngle={2}
                   dataKey="value"
+                  isAnimationActive={false}
                 >
                   {fleetStatusData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={tooltipStyle} labelStyle={tooltipLabelStyle} />
+                <Tooltip contentStyle={tooltipStyle} labelStyle={tooltipLabelStyle} isAnimationActive={false} />
               </PieChart>
             </ResponsiveContainer>
             </div>
@@ -172,8 +198,8 @@ export default function DashboardPage() {
                 <CartesianGrid stroke={chartGrid} strokeDasharray="3 3" opacity={0.65} />
                 <XAxis dataKey="day" tick={{ fill: chartAxis, fontSize: 12 }} axisLine={{ stroke: chartGrid }} tickLine={{ stroke: chartGrid }} />
                 <YAxis tick={{ fill: chartAxis, fontSize: 12 }} axisLine={{ stroke: chartGrid }} tickLine={{ stroke: chartGrid }} />
-                <Tooltip contentStyle={tooltipStyle} labelStyle={tooltipLabelStyle} cursor={{ fill: isDark ? 'rgba(14, 165, 233, 0.08)' : 'rgba(14, 165, 233, 0.12)' }} />
-                <Bar dataKey="distance" fill="#06b6d4" radius={[8, 8, 0, 0]} />
+                <Tooltip contentStyle={tooltipStyle} labelStyle={tooltipLabelStyle} cursor={chartCursor} isAnimationActive={false} />
+                <Bar dataKey="distance" fill="#06b6d4" radius={[8, 8, 0, 0]} isAnimationActive={false} />
               </BarChart>
             </ResponsiveContainer>
             </div>
@@ -187,8 +213,8 @@ export default function DashboardPage() {
                 <CartesianGrid stroke={chartGrid} strokeDasharray="3 3" opacity={0.65} />
                 <XAxis dataKey="time" tick={{ fill: chartAxis, fontSize: 12 }} axisLine={{ stroke: chartGrid }} tickLine={{ stroke: chartGrid }} />
                 <YAxis tick={{ fill: chartAxis, fontSize: 12 }} axisLine={{ stroke: chartGrid }} tickLine={{ stroke: chartGrid }} />
-                <Tooltip contentStyle={tooltipStyle} labelStyle={tooltipLabelStyle} />
-                <Line type="monotone" dataKey="speed" stroke="#06b6d4" strokeWidth={3} dot={{ fill: '#06b6d4', stroke: isDark ? '#0f172a' : '#ffffff', strokeWidth: 2 }} />
+                <Tooltip contentStyle={tooltipStyle} labelStyle={tooltipLabelStyle} isAnimationActive={false} />
+                <Line type="monotone" dataKey="speed" stroke="#06b6d4" strokeWidth={3} dot={{ fill: '#06b6d4', stroke: isDark ? '#0f172a' : '#ffffff', strokeWidth: 2, r: 3 }} activeDot={false} isAnimationActive={false} />
               </LineChart>
             </ResponsiveContainer>
             </div>
@@ -202,8 +228,8 @@ export default function DashboardPage() {
                 <CartesianGrid stroke={chartGrid} strokeDasharray="3 3" opacity={0.65} />
                 <XAxis type="number" tick={{ fill: chartAxis, fontSize: 12 }} axisLine={{ stroke: chartGrid }} tickLine={{ stroke: chartGrid }} allowDecimals={false} />
                 <YAxis dataKey="type" type="category" width={92} tick={{ fill: chartAxis, fontSize: 12 }} axisLine={{ stroke: chartGrid }} tickLine={{ stroke: chartGrid }} />
-                <Tooltip contentStyle={tooltipStyle} labelStyle={tooltipLabelStyle} cursor={{ fill: isDark ? 'rgba(14, 165, 233, 0.08)' : 'rgba(14, 165, 233, 0.12)' }} />
-                <Bar dataKey="count" radius={[0, 8, 8, 0]}>
+                <Tooltip contentStyle={tooltipStyle} labelStyle={tooltipLabelStyle} cursor={chartCursor} isAnimationActive={false} />
+                <Bar dataKey="count" radius={[0, 8, 8, 0]} isAnimationActive={false}>
                   {alertsByTypeData.map((entry) => (
                     <Cell key={entry.type} fill={entry.color} />
                   ))}
