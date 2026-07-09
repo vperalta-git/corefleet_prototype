@@ -42,10 +42,6 @@ export function AppSidebar() {
   const router = useRouter();
   const { open, setOpen } = useSidebar();
   const { theme } = useTheme();
-  const logoSrc =
-    theme === 'dark'
-      ? '/logos/Coretech_Logo_Dark_Background.png'
-      : '/logos/Coretech_Logo_Light_Background.png';
   const faviconSrc = theme === 'dark' ? '/logos/favicon_dark.png' : '/logos/favicon_light.png';
 
   const handleLogout = () => {
@@ -62,15 +58,25 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex items-center gap-3">
-          <img
-            src={faviconSrc}
-            alt="Coretech"
-            className={cn('size-11 shrink-0 rounded-xl object-contain shadow-lg shadow-cyan-500/20', open && 'xl:hidden')}
-          />
+        <div className="flex min-w-0 items-center gap-3">
+          <div
+            className={cn(
+              'grid size-12 shrink-0 place-items-center overflow-hidden rounded-2xl bg-sky-950 shadow-lg shadow-cyan-500/20 ring-1 ring-sky-400/20',
+              open && 'xl:hidden',
+            )}
+          >
+            <img src={faviconSrc} alt="Coretech" className="size-14 object-cover object-center" />
+          </div>
           <div className={cn('min-w-0 transition-opacity', !open && 'xl:hidden')}>
-            <img src={logoSrc} alt="Coretech" className="h-12 w-auto object-contain" />
-            <p className="mt-1 truncate text-xs font-black uppercase tracking-[0.2em] text-sky-600">
+            <div className="flex items-baseline gap-1">
+              <span className="text-[1.35rem] font-black leading-none tracking-normal text-slate-950 dark:text-white">
+                CORE
+              </span>
+              <span className="text-[1.35rem] font-black leading-none tracking-normal text-sky-500 dark:text-cyan-300">
+                TECH
+              </span>
+            </div>
+            <p className="mt-1 truncate text-[0.68rem] font-black uppercase tracking-[0.18em] text-sky-600 dark:text-sky-300">
               Fleet Command
             </p>
           </div>
