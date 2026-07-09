@@ -34,21 +34,28 @@ export default function LoginPage() {
     theme === 'dark'
       ? '/logos/Coretech_Logo_Dark_Background.png'
       : '/logos/Coretech_Logo_Light_Background.png';
+  const faviconSrc = theme === 'dark' ? '/logos/favicon_dark.png' : '/logos/favicon_light.png';
 
   return (
-    <div className="min-h-screen overflow-hidden bg-slate-950 text-white">
+    <div className="min-h-screen overflow-hidden bg-[#020817] text-white">
       <div className="fixed right-4 top-4 z-20">
         <ThemeToggle />
       </div>
       <div className="grid min-h-screen lg:grid-cols-[1.1fr_0.9fr]">
         <section className="relative hidden items-center justify-center overflow-hidden p-10 lg:flex">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(34,211,238,0.24),transparent_28%),radial-gradient(circle_at_80%_70%,rgba(16,185,129,0.18),transparent_30%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_18%,rgba(14,165,233,0.36),transparent_30%),radial-gradient(circle_at_78%_72%,rgba(34,211,238,0.18),transparent_32%)]" />
           <div className="relative w-full max-w-2xl animate-in fade-in slide-in-from-left-6 duration-700">
             <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-cyan-100">
               <ShieldCheck size={16} />
               Fleet operations, dispatch, telemetry
             </div>
-            <img src="/logos/Coretech_Logo_Dark_Background.png" alt="Coretech" className="h-20 w-auto object-contain" />
+            <div className="inline-flex rounded-2xl border border-cyan-300/25 bg-[#030b1f]/80 p-4 shadow-2xl shadow-sky-500/20 backdrop-blur">
+              <img
+                src="/logos/Coretech_Logo_Dark_Background.png"
+                alt="Coretech"
+                className="h-24 w-[23rem] object-cover object-center"
+              />
+            </div>
             <p className="mt-5 max-w-xl text-lg leading-8 text-slate-300">
               A sharper command center for live vehicles, driver activity, trips, alerts, and diagnostics.
             </p>
@@ -67,16 +74,29 @@ export default function LoginPage() {
           </div>
         </section>
 
-        <section className="flex items-center justify-center bg-slate-50 p-4 text-slate-950 sm:p-8">
+        <section className="flex items-center justify-center bg-[#f3fbff] p-4 text-slate-950 dark:bg-[#08152a] sm:p-8">
           <div className="w-full max-w-md animate-in fade-in zoom-in-95 duration-500">
-            <div className="mb-8 text-center">
-              <div className="mb-4 flex items-center justify-center gap-3">
-                <img src={logoSrc} alt="Coretech" className="h-16 w-auto object-contain" />
+            <div className="mb-7 text-center">
+              <div className="mb-4 flex justify-center">
+                <div className="relative flex w-full max-w-[22rem] items-center gap-4 rounded-2xl border border-sky-200 bg-white p-3 shadow-xl shadow-sky-200/40 dark:border-sky-500/30 dark:bg-[#030b1f] dark:shadow-sky-950/40">
+                  <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-sky-950 shadow-lg shadow-sky-500/20 dark:bg-sky-950">
+                    <img src={faviconSrc} alt="" className="size-14 object-cover object-center" />
+                  </div>
+                  <div className="min-w-0 flex-1 overflow-hidden rounded-xl bg-[#071733] dark:bg-[#030814]">
+                    <img
+                      src={logoSrc}
+                      alt="Coretech"
+                      className="h-20 w-full object-cover object-center"
+                    />
+                  </div>
+                </div>
               </div>
-              <p className="text-sm font-medium text-slate-500">Fleet Management Dashboard</p>
+              <p className="text-sm font-black uppercase tracking-[0.18em] text-sky-700 dark:text-sky-200">
+                Fleet Management Dashboard
+              </p>
             </div>
 
-            <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-2xl shadow-slate-950/10">
+            <div className="rounded-3xl border border-sky-100 bg-white p-8 shadow-2xl shadow-sky-950/10 dark:border-sky-500/20 dark:bg-[#0d1930]">
               <h2 className="text-2xl font-black tracking-tight text-slate-950">Sign in</h2>
               <p className="mt-2 text-sm text-slate-500">Access your fleet command workspace.</p>
 
