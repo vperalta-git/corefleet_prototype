@@ -1,5 +1,8 @@
 import { Vehicle, Trip, Alert } from './types';
 
+const MOCK_NOW = Date.UTC(2026, 6, 9, 1, 0, 0);
+const mockIso = (offsetMs = 0) => new Date(MOCK_NOW + offsetMs).toISOString();
+
 const createTelemetry = (
   speeds: number[],
   fuelConsumption: number[],
@@ -48,7 +51,7 @@ export const mockVehicles: Vehicle[] = [
       [66, 74, 82, 88, 90, 89, 88],
       [12.8, 13.4, 13.8, 14.0, 14.1, 13.9, 13.9]
     ),
-    lastUpdated: new Date().toISOString(),
+    lastUpdated: mockIso(),
   },
   {
     id: '2',
@@ -80,7 +83,7 @@ export const mockVehicles: Vehicle[] = [
       [64, 76, 84, 89, 92, 91, 91],
       [12.9, 13.3, 13.7, 14.0, 14.2, 14.1, 14.1]
     ),
-    lastUpdated: new Date().toISOString(),
+    lastUpdated: mockIso(),
   },
   {
     id: '3',
@@ -112,7 +115,7 @@ export const mockVehicles: Vehicle[] = [
       [82, 75, 70, 66, 64, 63, 62],
       [12.9, 12.8, 12.8, 12.7, 12.7, 12.6, 12.6]
     ),
-    lastUpdated: new Date().toISOString(),
+    lastUpdated: mockIso(),
   },
   {
     id: '4',
@@ -144,7 +147,7 @@ export const mockVehicles: Vehicle[] = [
       [68, 75, 81, 85, 87, 86, 86],
       [12.8, 13.2, 13.6, 13.9, 14.0, 13.8, 13.8]
     ),
-    lastUpdated: new Date().toISOString(),
+    lastUpdated: mockIso(),
   },
   {
     id: '5',
@@ -176,7 +179,7 @@ export const mockVehicles: Vehicle[] = [
       [30, 29, 29, 28, 28, 28, 28],
       [12.5, 12.4, 12.4, 12.3, 12.3, 12.3, 12.3]
     ),
-    lastUpdated: new Date().toISOString(),
+    lastUpdated: mockIso(),
   },
   {
     id: '6',
@@ -208,7 +211,7 @@ export const mockVehicles: Vehicle[] = [
       [70, 80, 89, 94, 97, 96, 95],
       [12.9, 13.5, 13.9, 14.1, 14.3, 14.2, 14.2]
     ),
-    lastUpdated: new Date().toISOString(),
+    lastUpdated: mockIso(),
   },
   {
     id: '7',
@@ -240,7 +243,7 @@ export const mockVehicles: Vehicle[] = [
       [82, 76, 66, 61, 58, 56, 55],
       [13.4, 13.0, 12.7, 12.5, 12.3, 12.2, 12.1]
     ),
-    lastUpdated: new Date(Date.now() - 3600000).toISOString(),
+    lastUpdated: mockIso(-3600000),
   },
   {
     id: '8',
@@ -272,7 +275,7 @@ export const mockVehicles: Vehicle[] = [
       [65, 73, 80, 86, 88, 87, 87],
       [12.8, 13.2, 13.6, 13.8, 13.9, 13.8, 13.7]
     ),
-    lastUpdated: new Date().toISOString(),
+    lastUpdated: mockIso(),
   },
   {
     id: '9',
@@ -304,7 +307,7 @@ export const mockVehicles: Vehicle[] = [
       [72, 80, 78, 68, 64, 62, 60],
       [13.3, 13.8, 13.7, 12.9, 12.8, 12.7, 12.7]
     ),
-    lastUpdated: new Date().toISOString(),
+    lastUpdated: mockIso(),
   },
   {
     id: '10',
@@ -336,7 +339,7 @@ export const mockVehicles: Vehicle[] = [
       [67, 77, 86, 91, 94, 93, 93],
       [12.9, 13.4, 13.8, 14.0, 14.1, 14.0, 14.0]
     ),
-    lastUpdated: new Date().toISOString(),
+    lastUpdated: mockIso(),
   },
 ];
 
@@ -348,8 +351,8 @@ export const mockTrips: Trip[] = [
     driver: 'Juan Santos',
     startLocation: 'Manila Hub',
     endLocation: 'Makati Branch',
-    startTime: new Date(Date.now() - 7200000).toISOString(),
-    endTime: new Date(Date.now() - 3600000).toISOString(),
+    startTime: mockIso(-7200000),
+    endTime: mockIso(-3600000),
     distance: 28.5,
     status: 'completed',
     fuelUsed: 4.2,
@@ -361,8 +364,8 @@ export const mockTrips: Trip[] = [
     driver: 'Juan Santos',
     startLocation: 'Makati Branch',
     endLocation: 'BGC Hub',
-    startTime: new Date(Date.now() - 3600000).toISOString(),
-    endTime: new Date().toISOString(),
+    startTime: mockIso(-3600000),
+    endTime: mockIso(),
     distance: 15.3,
     status: 'in-progress',
     fuelUsed: 2.1,
@@ -374,8 +377,8 @@ export const mockTrips: Trip[] = [
     driver: 'Maria Garcia',
     startLocation: 'Manila Hub',
     endLocation: 'Pasay Center',
-    startTime: new Date(Date.now() - 5400000).toISOString(),
-    endTime: new Date().toISOString(),
+    startTime: mockIso(-5400000),
+    endTime: mockIso(),
     distance: 22.8,
     status: 'completed',
     fuelUsed: 3.5,
@@ -387,8 +390,8 @@ export const mockTrips: Trip[] = [
     driver: 'Maria Garcia',
     startLocation: 'Pasay Center',
     endLocation: 'Las Piñas Terminal',
-    startTime: new Date(Date.now() - 1800000).toISOString(),
-    endTime: new Date(Date.now() + 3600000).toISOString(),
+    startTime: mockIso(-1800000),
+    endTime: mockIso(3600000),
     distance: 35.0,
     status: 'scheduled',
     fuelUsed: 0,
@@ -400,8 +403,8 @@ export const mockTrips: Trip[] = [
     driver: 'Rosa Martinez',
     startLocation: 'Manila Hub',
     endLocation: 'Quezon City Depot',
-    startTime: new Date(Date.now() - 10800000).toISOString(),
-    endTime: new Date(Date.now() - 7200000).toISOString(),
+    startTime: mockIso(-10800000),
+    endTime: mockIso(-7200000),
     distance: 45.2,
     status: 'completed',
     fuelUsed: 8.5,
@@ -416,7 +419,7 @@ export const mockAlerts: Alert[] = [
     type: 'Scheduled Maintenance',
     severity: 'warning',
     message: 'Vehicle due for maintenance in 3 days',
-    timestamp: new Date(Date.now() - 1800000).toISOString(),
+    timestamp: mockIso(-1800000),
     resolved: false,
   },
   {
@@ -426,7 +429,7 @@ export const mockAlerts: Alert[] = [
     type: 'Vehicle Offline',
     severity: 'critical',
     message: 'Vehicle has been offline for 1+ hour',
-    timestamp: new Date(Date.now() - 3600000).toISOString(),
+    timestamp: mockIso(-3600000),
     resolved: false,
   },
   {
@@ -436,7 +439,7 @@ export const mockAlerts: Alert[] = [
     type: 'In Maintenance',
     severity: 'info',
     message: 'Vehicle is currently in scheduled maintenance',
-    timestamp: new Date(Date.now() - 7200000).toISOString(),
+    timestamp: mockIso(-7200000),
     resolved: false,
   },
   {
@@ -446,7 +449,7 @@ export const mockAlerts: Alert[] = [
     type: 'High Speed',
     severity: 'warning',
     message: 'Vehicle exceeded speed limit (80 km/h)',
-    timestamp: new Date(Date.now() - 10800000).toISOString(),
+    timestamp: mockIso(-10800000),
     resolved: true,
   },
   {
@@ -456,7 +459,7 @@ export const mockAlerts: Alert[] = [
     type: 'Low Fuel',
     severity: 'warning',
     message: 'Fuel level below 50%',
-    timestamp: new Date(Date.now() - 14400000).toISOString(),
+    timestamp: mockIso(-14400000),
     resolved: false,
   },
 ];
