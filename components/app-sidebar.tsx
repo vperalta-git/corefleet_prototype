@@ -81,15 +81,6 @@ export function AppSidebar() {
             </p>
           </div>
         </div>
-        <div className={cn('mt-5 rounded-xl border border-cyan-100 bg-cyan-50 p-4 transition-opacity', !open && 'xl:hidden')}>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-700">Live Network</p>
-          <div className="mt-3 flex items-end justify-between">
-            <span className="text-2xl font-black text-slate-950">98.7%</span>
-            <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-bold text-emerald-700">
-              Online
-            </span>
-          </div>
-        </div>
       </SidebarHeader>
 
       <SidebarContent>
