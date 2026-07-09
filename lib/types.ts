@@ -14,6 +14,7 @@ export interface Vehicle {
     lat: number;
     lng: number;
   };
+  heading: number;
   address: string;
   speed: number;
   odometer: number;

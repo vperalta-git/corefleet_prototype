@@ -50,6 +50,13 @@ const statusColors: Record<VehicleStatus, string> = {
   offline: 'bg-rose-500',
 };
 
+const statusMarkerColors: Record<VehicleStatus, string> = {
+  active: '#22c55e',
+  idle: '#eab308',
+  maintenance: '#f97316',
+  offline: '#ef4444',
+};
+
 export default function MapPage() {
   const { theme } = useTheme();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -111,6 +118,7 @@ export default function MapPage() {
     ? [
         { label: 'Ignition', value: selectedVehicle.ignition === 'on' ? 'On' : 'Off', icon: Power },
         { label: 'Current Speed', value: `${selectedVehicle.speed} km/h`, icon: Gauge },
+        { label: 'Heading', value: `${selectedVehicle.heading} deg`, icon: Navigation },
         { label: 'Fuel Load', value: `${selectedVehicle.fuelLoad} L / ${selectedVehicle.fuelCapacity} L`, icon: Fuel },
         { label: 'Fuel Consumption', value: `${selectedVehicle.fuelConsumption} L/100 km`, icon: Route },
       ]
@@ -338,27 +346,43 @@ export default function MapPage() {
                 {filteredVehicles.map((vehicle) => {
                   const { x, y } = getMapPosition(vehicle);
                   const isSelected = selectedVehicle?.id === vehicle.id;
+                  const markerColor = statusMarkerColors[vehicle.status];
+                  const markerOpacity = vehicle.status === 'offline' ? 0.72 : 1;
+                  const markerScale = isSelected ? 1.28 : 1;
 
                   return (
                     <g key={vehicle.id} onClick={() => handleSelectVehicle(vehicle)} style={{ cursor: 'pointer' }}>
+                      {isSelected && (
+                        <circle cx={x} cy={y} r="3.4" fill="none" stroke="#0284c7" strokeWidth="0.42" className="animate-pulse" />
+                      )}
                       <circle
                         cx={x}
                         cy={y}
-                        r={isSelected ? 1.75 : 1.05}
-                        fill={
-                          vehicle.status === 'active'
-                            ? '#22c55e'
-                            : vehicle.status === 'idle'
-                            ? '#eab308'
-                            : vehicle.status === 'maintenance'
-                            ? '#f97316'
-                            : '#ef4444'
-                        }
-                        opacity={isSelected ? 1 : 0.78}
-                        className="transition-all"
+                        r={isSelected ? 1.45 : 1.05}
+                        fill={isDark ? '#020617' : '#ffffff'}
+                        stroke={markerColor}
+                        strokeWidth="0.36"
+                        opacity={markerOpacity}
                       />
+                      <g transform={`translate(${x} ${y}) rotate(${vehicle.heading}) scale(${markerScale})`}>
+                        <path
+                          d="M 0 -3.25 L 2.05 2.15 L 0 1.18 L -2.05 2.15 Z"
+                          fill={markerColor}
+                          stroke={isDark ? '#e0f2fe' : '#ffffff'}
+                          strokeWidth="0.32"
+                          strokeLinejoin="round"
+                          opacity={markerOpacity}
+                        />
+                        <path
+                          d="M 0 -1.85 L 0.78 0.56 L 0 0.18 L -0.78 0.56 Z"
+                          fill={isDark ? '#020617' : '#ffffff'}
+                          opacity="0.82"
+                        />
+                      </g>
                       {isSelected && (
-                        <circle cx={x} cy={y} r="2.8" fill="none" stroke="#0284c7" strokeWidth="0.42" className="animate-pulse" />
+                        <text x={x + 3.2} y={y - 2.4} fontSize="1.05" fill={mapLabelFill} fontWeight="bold">
+                          {vehicle.heading} deg
+                        </text>
                       )}
                     </g>
                   );
@@ -461,6 +485,10 @@ export default function MapPage() {
                     </div>
                     <p className="font-mono text-sm text-slate-900">
                       {selectedVehicle.location.lat.toFixed(4)}, {selectedVehicle.location.lng.toFixed(4)}
+                    </p>
+                    <p className="mt-1 flex items-center gap-1.5 text-xs font-black uppercase tracking-[0.12em] text-sky-700">
+                      <Navigation size={13} />
+                      Facing {selectedVehicle.heading} deg
                     </p>
                   </div>
 

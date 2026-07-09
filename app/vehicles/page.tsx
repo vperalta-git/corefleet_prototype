@@ -48,6 +48,7 @@ export default function VehiclesPage() {
         id: Date.now().toString(),
         ...formData,
         location: { lat: 14.5995, lng: 120.9842 },
+        heading: 0,
         speed: 0,
         odometer: 0,
         fuelLevel: 100,

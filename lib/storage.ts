@@ -48,6 +48,7 @@ function hydrateVehicle(vehicle: Partial<Vehicle>): Vehicle {
     status: vehicle.status ?? mockVehicle?.status ?? 'active',
     ignition: vehicle.ignition ?? mockVehicle?.ignition ?? (vehicle.status === 'active' ? 'on' : 'off'),
     location: vehicle.location ?? mockVehicle?.location ?? { lat: 14.5995, lng: 120.9842 },
+    heading: vehicle.heading ?? mockVehicle?.heading ?? 0,
     address: vehicle.address ?? mockVehicle?.address ?? 'Manila fleet yard',
     speed: vehicle.speed ?? mockVehicle?.speed ?? 0,
     odometer: vehicle.odometer ?? mockVehicle?.odometer ?? 0,
