@@ -33,11 +33,11 @@ export default function LoginPage() {
   const faviconSrc = theme === 'dark' ? '/logos/favicon_dark.png' : '/logos/favicon_light.png';
 
   return (
-    <div className="min-h-screen overflow-hidden bg-[#020817] text-white">
-      <div className="fixed right-4 top-4 z-20">
+    <div className="min-h-dvh overflow-x-hidden overflow-y-auto bg-[#020817] text-white">
+      <div className="fixed right-3 top-3 z-20 sm:right-4 sm:top-4">
         <ThemeToggle />
       </div>
-      <div className="grid min-h-screen lg:grid-cols-[1.1fr_0.9fr]">
+      <div className="grid min-h-dvh lg:grid-cols-[1.1fr_0.9fr]">
         <section className="relative hidden items-center justify-center overflow-hidden p-10 lg:flex">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_18%,rgba(14,165,233,0.36),transparent_30%),radial-gradient(circle_at_78%_72%,rgba(34,211,238,0.18),transparent_32%)]" />
           <div className="relative w-full max-w-2xl animate-in fade-in slide-in-from-left-6 duration-700">
@@ -76,30 +76,30 @@ export default function LoginPage() {
           </div>
         </section>
 
-        <section className="flex items-center justify-center bg-[#f3fbff] p-4 text-slate-950 dark:bg-[#08152a] sm:p-8">
-          <div className="w-full max-w-md animate-in fade-in zoom-in-95 duration-500">
-            <div className="mb-7 text-center">
-              <div className="mb-4 flex justify-center">
-                <div className="relative flex w-full max-w-[26rem] items-center gap-4 rounded-3xl border border-sky-200 bg-white px-5 py-4 shadow-2xl shadow-sky-200/50 dark:border-sky-500/30 dark:bg-[#03122d] dark:shadow-sky-950/50">
-                  <div className="flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-sky-950 shadow-lg shadow-sky-500/25 ring-1 ring-sky-300/25">
-                    <img src={faviconSrc} alt="" className="size-24 object-cover object-center" />
+        <section className="flex min-h-dvh items-center justify-center bg-[#f3fbff] px-4 py-6 text-slate-950 dark:bg-[#08152a] sm:px-6">
+          <div className="w-full max-w-[360px] animate-in fade-in zoom-in-95 duration-500 sm:max-w-md">
+            <div className="mb-5 text-center sm:mb-7">
+              <div className="mb-3 flex justify-center sm:mb-4">
+                <div className="relative flex w-full items-center gap-3 rounded-2xl border border-sky-200 bg-white px-4 py-3 shadow-2xl shadow-sky-200/50 dark:border-sky-500/30 dark:bg-[#03122d] dark:shadow-sky-950/50 sm:gap-4 sm:rounded-3xl sm:px-5 sm:py-4">
+                  <div className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-sky-950 shadow-lg shadow-sky-500/25 ring-1 ring-sky-300/25 sm:size-20">
+                    <img src={faviconSrc} alt="" className="size-20 object-cover object-center sm:size-24" />
                   </div>
                   <div className="min-w-0 flex-1 text-left">
-                    <p className="text-3xl font-black leading-none tracking-normal text-slate-950 dark:text-white">
+                    <p className="text-2xl font-black leading-none tracking-normal text-slate-950 dark:text-white sm:text-3xl">
                       CORE<span className="text-sky-500 dark:text-cyan-300">TECH</span>
                     </p>
-                    <p className="mt-1 truncate text-[0.7rem] font-black uppercase tracking-[0.16em] text-sky-700 dark:text-sky-200">
-                      Innovations and Solutions, Inc.
+                    <p className="mt-1 text-[0.62rem] font-black uppercase leading-4 tracking-[0.12em] text-sky-700 dark:text-sky-200 sm:text-[0.7rem] sm:tracking-[0.16em]">
+                      Innovations and Solutions
                     </p>
                   </div>
                 </div>
               </div>
-              <p className="text-sm font-black uppercase tracking-[0.18em] text-sky-700 dark:text-sky-200">
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-sky-700 dark:text-sky-200 sm:text-sm sm:tracking-[0.18em]">
                 Fleet Management Dashboard
               </p>
             </div>
 
-            <div className="rounded-3xl border border-sky-100 bg-white p-8 shadow-2xl shadow-sky-950/10 dark:border-sky-500/20 dark:bg-[#0d1930]">
+            <div className="rounded-2xl border border-sky-100 bg-white p-5 shadow-2xl shadow-sky-950/10 dark:border-sky-500/20 dark:bg-[#0d1930] sm:rounded-3xl sm:p-8">
               <h2 className="text-2xl font-black tracking-tight text-slate-950">Sign in</h2>
               <p className="mt-2 text-sm text-slate-500">Access your fleet command workspace.</p>
 

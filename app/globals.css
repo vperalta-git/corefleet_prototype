@@ -7,6 +7,26 @@
   color-scheme: light;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
 .dark {
   color-scheme: dark;
 }
@@ -96,6 +116,10 @@
 }
 
 @media (max-width: 640px) {
+  body {
+    min-width: 320px;
+  }
+
   h1 {
     font-size: 1.875rem !important;
     line-height: 2.25rem !important;
@@ -146,5 +170,38 @@
 
   table {
     min-width: 720px;
+  }
+}
+
+@media (max-width: 420px) {
+  .p-8 {
+    padding: 1rem !important;
+  }
+
+  .px-6 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .py-6 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  .text-3xl {
+    font-size: 1.375rem !important;
+    line-height: 1.75rem !important;
+  }
+
+  .text-2xl {
+    font-size: 1.25rem !important;
+    line-height: 1.625rem !important;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    min-height: 44px;
   }
 }
