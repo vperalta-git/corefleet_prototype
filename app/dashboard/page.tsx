@@ -3,12 +3,14 @@
 import { useState, useEffect } from 'react';
 import { PageWrapper } from '@/components/PageWrapper';
 import { StatCard } from '@/components/StatCard';
+import { useTheme } from '@/components/ThemeProvider';
 import { Vehicle, Alert } from '@/lib/types';
 import { getVehicles, getAlerts } from '@/lib/storage';
 import { Truck, AlertTriangle, TrendingUp, Fuel } from 'lucide-react';
 import { PieChart, Pie, Cell, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function DashboardPage() {
+  const { theme } = useTheme();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [alerts, setAlerts] = useState<Alert[]>([]);
 
@@ -59,6 +61,17 @@ export default function DashboardPage() {
     { type: 'Offline', count: 1, color: '#ef4444' },
     { type: 'Low Fuel', count: 1, color: '#eab308' },
   ];
+  const isDark = theme === 'dark';
+  const chartGrid = isDark ? '#334155' : '#cbd5e1';
+  const chartAxis = isDark ? '#cbd5e1' : '#475569';
+  const tooltipStyle = {
+    backgroundColor: isDark ? '#020617' : '#ffffff',
+    border: `1px solid ${isDark ? '#1e3a5f' : '#bae6fd'}`,
+    borderRadius: '12px',
+    color: isDark ? '#f8fafc' : '#0f172a',
+    boxShadow: isDark ? '0 16px 40px rgb(0 0 0 / 0.35)' : '0 16px 40px rgb(15 23 42 / 0.12)',
+  };
+  const tooltipLabelStyle = { color: isDark ? '#7dd3fc' : '#0369a1', fontWeight: 800 };
 
   return (
     <PageWrapper>
@@ -137,7 +150,7 @@ export default function DashboardPage() {
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip contentStyle={tooltipStyle} labelStyle={tooltipLabelStyle} />
               </PieChart>
             </ResponsiveContainer>
             </div>
@@ -156,10 +169,10 @@ export default function DashboardPage() {
             <div className="h-[190px] sm:h-[210px] xl:h-[clamp(190px,24vh,230px)]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={dailyMileageData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="day" />
-                <YAxis />
-                <Tooltip />
+                <CartesianGrid stroke={chartGrid} strokeDasharray="3 3" opacity={0.65} />
+                <XAxis dataKey="day" tick={{ fill: chartAxis, fontSize: 12 }} axisLine={{ stroke: chartGrid }} tickLine={{ stroke: chartGrid }} />
+                <YAxis tick={{ fill: chartAxis, fontSize: 12 }} axisLine={{ stroke: chartGrid }} tickLine={{ stroke: chartGrid }} />
+                <Tooltip contentStyle={tooltipStyle} labelStyle={tooltipLabelStyle} cursor={{ fill: isDark ? 'rgba(14, 165, 233, 0.08)' : 'rgba(14, 165, 233, 0.12)' }} />
                 <Bar dataKey="distance" fill="#06b6d4" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -171,11 +184,11 @@ export default function DashboardPage() {
             <div className="h-[190px] sm:h-[210px] xl:h-[clamp(190px,24vh,230px)]">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={speedTrendData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="time" />
-                <YAxis />
-                <Tooltip />
-                <Line type="monotone" dataKey="speed" stroke="#06b6d4" strokeWidth={3} dot={{ fill: '#06b6d4' }} />
+                <CartesianGrid stroke={chartGrid} strokeDasharray="3 3" opacity={0.65} />
+                <XAxis dataKey="time" tick={{ fill: chartAxis, fontSize: 12 }} axisLine={{ stroke: chartGrid }} tickLine={{ stroke: chartGrid }} />
+                <YAxis tick={{ fill: chartAxis, fontSize: 12 }} axisLine={{ stroke: chartGrid }} tickLine={{ stroke: chartGrid }} />
+                <Tooltip contentStyle={tooltipStyle} labelStyle={tooltipLabelStyle} />
+                <Line type="monotone" dataKey="speed" stroke="#06b6d4" strokeWidth={3} dot={{ fill: '#06b6d4', stroke: isDark ? '#0f172a' : '#ffffff', strokeWidth: 2 }} />
               </LineChart>
             </ResponsiveContainer>
             </div>
@@ -186,11 +199,15 @@ export default function DashboardPage() {
             <div className="h-[190px] sm:h-[210px] xl:h-[clamp(190px,24vh,230px)]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={alertsByTypeData} layout="vertical" margin={{ left: 16, right: 12 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis type="number" />
-                <YAxis dataKey="type" type="category" width={86} />
-                <Tooltip />
-                <Bar dataKey="count" fill="#0f172a" radius={[0, 8, 8, 0]} />
+                <CartesianGrid stroke={chartGrid} strokeDasharray="3 3" opacity={0.65} />
+                <XAxis type="number" tick={{ fill: chartAxis, fontSize: 12 }} axisLine={{ stroke: chartGrid }} tickLine={{ stroke: chartGrid }} allowDecimals={false} />
+                <YAxis dataKey="type" type="category" width={92} tick={{ fill: chartAxis, fontSize: 12 }} axisLine={{ stroke: chartGrid }} tickLine={{ stroke: chartGrid }} />
+                <Tooltip contentStyle={tooltipStyle} labelStyle={tooltipLabelStyle} cursor={{ fill: isDark ? 'rgba(14, 165, 233, 0.08)' : 'rgba(14, 165, 233, 0.12)' }} />
+                <Bar dataKey="count" radius={[0, 8, 8, 0]}>
+                  {alertsByTypeData.map((entry) => (
+                    <Cell key={entry.type} fill={entry.color} />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
             </div>
